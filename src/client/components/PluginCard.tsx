@@ -103,7 +103,7 @@ export function PluginCard({ plugin, onSelect }: PluginCardProps): React.JSX.Ele
                 </div>
 
                 {formattedDate && (
-                    <span className="mpi:flex mpi:items-center mpi:gap-1 text-[11px]" title="Last updated">
+                    <span className="mpi:flex mpi:items-center mpi:gap-1 mpi:text-[11px]" title="Last updated">
                         <Calendar className="mpi:h-3 mpi:w-3" />
                         <span>{formattedDate}</span>
                     </span>

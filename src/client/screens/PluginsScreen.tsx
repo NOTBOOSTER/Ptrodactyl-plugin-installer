@@ -131,7 +131,7 @@ export default function PluginsScreen(): React.JSX.Element {
 
                 {!canCreateFiles && (
                     <div className="mpi:flex mpi:items-center mpi:gap-2 mpi:rounded-xl mpi:border mpi:border-amber-500/30 mpi:bg-amber-500/10 mpi:p-4 mpi:text-sm mpi:text-amber-300">
-                        <AlertCircle className="mpi:h-5 mpi:w-5 mpi:shrink-0 text-amber-400" />
+                        <AlertCircle className="mpi:h-5 mpi:w-5 mpi:shrink-0 mpi:text-amber-400" />
                         <span>You have read-only access. You can browse plugins, but installing them requires file creation permission.</span>
                     </div>
                 )}
