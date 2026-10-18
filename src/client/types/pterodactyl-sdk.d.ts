@@ -1,5 +1,3 @@
-import type { ComponentType, ReactNode } from 'react';
-
 declare module '@pterodactyl/sdk' {
     export interface SdkServerAttributes {
         id: number;
@@ -19,11 +17,11 @@ declare module '@pterodactyl/sdk' {
     }
 
     export interface ExtensionScreensRegistry {
-        register(id: string, loader: () => Promise<{ default: ComponentType<unknown> }>): void;
+        register(id: string, loader: () => Promise<{ default: import('react').ComponentType<unknown> }>): void;
     }
 
     export interface ExtensionSlotsRegistry {
-        register(name: string, component: ComponentType<unknown>): void;
+        register(name: string, component: import('react').ComponentType<unknown>): void;
     }
 
     export interface ExtensionSetupContext {
@@ -45,16 +43,16 @@ declare module '@pterodactyl/sdk' {
 
     export interface ServerContentBlockProps {
         title: string;
-        children: ReactNode;
+        children: import('react').ReactNode;
         className?: string;
     }
-    export function ServerContentBlock(props: ServerContentBlockProps): React.JSX.Element;
+    export function ServerContentBlock(props: ServerContentBlockProps): import('react').JSX.Element;
 
     export interface SpinnerProps {
         centered?: boolean;
         className?: string;
     }
-    export function Spinner(props?: SpinnerProps): React.JSX.Element;
+    export function Spinner(props?: SpinnerProps): import('react').JSX.Element;
 
     export const http: {
         get<T>(url: string, config?: Record<string, unknown>): Promise<{ data: T }>;
@@ -78,4 +76,9 @@ declare module '@pterodactyl/sdk/vite' {
         entry?: string;
     }
     export function defineExtensionConfig(options?: ExtensionConfigOptions): unknown;
+}
+
+declare module '*.css' {
+    const styles: Record<string, string>;
+    export default styles;
 }

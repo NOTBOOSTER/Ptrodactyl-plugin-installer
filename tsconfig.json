@@ -16,5 +16,5 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true
   },
-  "include": ["src/client"]
+  "include": ["src/client/**/*"]
 }
