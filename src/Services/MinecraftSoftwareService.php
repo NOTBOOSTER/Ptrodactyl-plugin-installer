@@ -7,10 +7,10 @@ use Pterodactyl\Repositories\Wings\DaemonFileRepository;
 
 class MinecraftSoftwareService
 {
-    protected Server $server;
-    protected DaemonFileRepository $fileRepository;
+    protected ?Server $server = null;
+    protected ?DaemonFileRepository $fileRepository = null;
 
-    public function __construct(DaemonFileRepository $fileRepository)
+    public function __construct(?DaemonFileRepository $fileRepository = null)
     {
         $this->fileRepository = $fileRepository;
     }
@@ -18,16 +18,30 @@ class MinecraftSoftwareService
     public function setServer(Server $server): self
     {
         $this->server = $server;
-        $this->fileRepository->setServer($server);
 
         return $this;
+    }
+
+    protected function getFileRepository(): DaemonFileRepository
+    {
+        if ($this->fileRepository === null) {
+            $this->fileRepository = app()->bound(DaemonFileRepository::class)
+                ? app(DaemonFileRepository::class)
+                : new DaemonFileRepository(app());
+        }
+
+        if ($this->server !== null) {
+            $this->fileRepository->setServer($this->server);
+        }
+
+        return $this->fileRepository;
     }
 
     public function getInstalledProjectsVersions(string $directory): array
     {
         try {
-            $files = $this->fileRepository->getDirectory($directory);
-        } catch (\Exception $e) {
+            $files = $this->getFileRepository()->getDirectory($directory);
+        } catch (\Throwable) {
             return [
                 'identified' => [],
                 'other' => [],
@@ -35,19 +49,19 @@ class MinecraftSoftwareService
         }
 
         $jarFiles = array_filter($files['files'] ?? [], function ($file) {
-            return pathinfo($file['name'], PATHINFO_EXTENSION) === 'jar';
+            return pathinfo($file['name'] ?? '', PATHINFO_EXTENSION) === 'jar';
         });
 
         $identified = [];
         $other = [];
 
         foreach ($jarFiles as $file) {
-            $other[] = $file['name'];
+            $other[] = $file['name'] ?? '';
         }
 
         return [
             'identified' => $identified,
-            'other' => $other,
+            'other' => array_values(array_filter($other)),
         ];
     }
 }

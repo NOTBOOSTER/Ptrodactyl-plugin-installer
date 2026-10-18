@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Pterodactyl\Models\Server;
 use Pterodactyl\Exceptions\DisplayException;
 use Pterodactyl\Repositories\Wings\DaemonFileRepository;
+use Pterodactyl\Services\Extensions\ExtensionSettingsRegistry;
 use MinecraftPluginInstaller\Enums\MinecraftPluginProvider;
 use MinecraftPluginInstaller\Services\AbstractPluginService;
 use MinecraftPluginInstaller\Services\HangarPluginService;
@@ -18,10 +19,6 @@ use MinecraftPluginInstaller\Services\MinecraftSoftwareService;
 
 class MinecraftPluginInstallerController
 {
-    public function __construct(private DaemonFileRepository $daemonFileRepository)
-    {
-    }
-
     public function index(Request $request, Server $server): array
     {
         abort_unless($request->user()->can('file.read-content', $server) || $request->user()->can('file.update', $server), 403);
@@ -122,7 +119,7 @@ class MinecraftPluginInstallerController
                 }
             }
 
-            $this->daemonFileRepository->setServer($server)->pull(
+            $this->getFileRepository($server)->pull(
                 $downloadDetails['downloadUrl'],
                 '/plugins',
                 $pullOptions
@@ -141,9 +138,11 @@ class MinecraftPluginInstallerController
         return response()->noContent();
     }
 
-    public function getInstalledPluginsVersions(Server $server, MinecraftSoftwareService $minecraftSoftwareService): array
+    public function getInstalledPluginsVersions(Server $server): array
     {
-        return $minecraftSoftwareService->setServer($server)->getInstalledProjectsVersions('plugins');
+        $softwareService = new MinecraftSoftwareService();
+
+        return $softwareService->setServer($server)->getInstalledProjectsVersions('plugins');
     }
 
     public function getMinecraftVersions(Request $request, Server $server): array
@@ -170,15 +169,24 @@ class MinecraftPluginInstallerController
         return $service->getPluginLoaders();
     }
 
+    protected function getFileRepository(Server $server): DaemonFileRepository
+    {
+        $repository = app()->bound(DaemonFileRepository::class)
+            ? app(DaemonFileRepository::class)
+            : new DaemonFileRepository(app());
+
+        return $repository->setServer($server);
+    }
+
     protected function getPluginService(MinecraftPluginProvider $provider): AbstractPluginService
     {
-        $class = match ($provider) {
-            MinecraftPluginProvider::CurseForge => CurseForgePluginService::class,
-            MinecraftPluginProvider::Hangar => HangarPluginService::class,
-            MinecraftPluginProvider::Modrinth => ModrinthPluginService::class,
-            MinecraftPluginProvider::SpigotMC => SpigotMCPluginService::class,
+        return match ($provider) {
+            MinecraftPluginProvider::CurseForge => new CurseForgePluginService(
+                app()->bound(ExtensionSettingsRegistry::class) ? app(ExtensionSettingsRegistry::class) : null
+            ),
+            MinecraftPluginProvider::Hangar => new HangarPluginService(),
+            MinecraftPluginProvider::Modrinth => new ModrinthPluginService(),
+            MinecraftPluginProvider::SpigotMC => new SpigotMCPluginService(),
         };
-
-        return app($class);
     }
 }

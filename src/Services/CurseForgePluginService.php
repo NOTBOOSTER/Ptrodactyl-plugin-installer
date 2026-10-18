@@ -31,11 +31,11 @@ class CurseForgePluginService extends AbstractPluginService
 
     protected Client $client;
 
-    public function __construct(ExtensionSettingsRegistry $settingsRegistry)
+    public function __construct(?ExtensionSettingsRegistry $settingsRegistry = null)
     {
         parent::__construct();
 
-        $apiKey = $settingsRegistry->get('ptrodactyl-plugin-installer')?->get('curseforge_api_key') ?? '';
+        $apiKey = $settingsRegistry?->get('ptrodactyl-plugin-installer')?->get('curseforge_api_key') ?? '';
 
         $this->client = new Client([
             'headers' => [
