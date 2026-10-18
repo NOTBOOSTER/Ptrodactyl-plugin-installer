@@ -176,11 +176,14 @@ export default function PluginsScreen(): React.JSX.Element {
                                 setFilters((prev) => ({ ...prev, minecraftVersion: val }));
                                 setPage(1);
                             }}
+                            style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
                             className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                         >
-                            <option value="">All MC Versions</option>
+                            <option value="" style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
+                                All MC Versions
+                            </option>
                             {mcVersions.map((version) => (
-                                <option key={version} value={version}>
+                                <option key={version} value={version} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
                                     MC {version}
                                 </option>
                             ))}
@@ -196,11 +199,14 @@ export default function PluginsScreen(): React.JSX.Element {
                                     setFilters((prev) => ({ ...prev, pluginLoader: val }));
                                     setPage(1);
                                 }}
+                                style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
                                 className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                             >
-                                <option value="">All Loaders</option>
+                                <option value="" style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
+                                    All Loaders
+                                </option>
                                 {loaders.map((loader) => (
-                                    <option key={loader} value={loader}>
+                                    <option key={loader} value={loader} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
                                         {loader}
                                     </option>
                                 ))}
@@ -218,10 +224,11 @@ export default function PluginsScreen(): React.JSX.Element {
                                     setFilters((prev) => ({ ...prev, sort: val }));
                                     setPage(1);
                                 }}
+                                style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
                                 className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                             >
                                 {SORT_OPTIONS.map((opt) => (
-                                    <option key={opt.value} value={opt.value}>
+                                    <option key={opt.value} value={opt.value} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
                                         {opt.label}
                                     </option>
                                 ))}

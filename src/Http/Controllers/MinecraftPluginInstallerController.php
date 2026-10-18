@@ -4,10 +4,9 @@ namespace MinecraftPluginInstaller\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Pterodactyl\Models\Server;
-use Pterodactyl\Exceptions\DisplayException;
-use Pterodactyl\Repositories\Wings\DaemonFileRepository;
 use Pterodactyl\Services\Extensions\ExtensionSettingsRegistry;
 use MinecraftPluginInstaller\Enums\MinecraftPluginProvider;
 use MinecraftPluginInstaller\Services\AbstractPluginService;
@@ -89,7 +88,7 @@ class MinecraftPluginInstallerController
         ];
     }
 
-    public function install(Request $request, Server $server): Response
+    public function downloadDetails(Request $request, Server $server): array
     {
         abort_unless($request->user()->can('file.create', $server), 403);
 
@@ -100,42 +99,60 @@ class MinecraftPluginInstallerController
         ]);
 
         $provider = MinecraftPluginProvider::from($validated['provider']);
-        $pluginId = $validated['plugin_id'];
-        $versionId = $validated['version'];
-
         $service = $this->getPluginService($provider);
-        $downloadDetails = $service->getDownloadDetails($pluginId, $versionId);
+
+        return $service->getDownloadDetails($validated['plugin_id'], $validated['version']);
+    }
+
+    public function install(Request $request, Server $server): JsonResponse
+    {
+        abort_unless($request->user()->can('file.create', $server), 403);
+
+        $validated = $request->validate([
+            'provider' => ['required', Rule::enum(MinecraftPluginProvider::class)],
+            'plugin_id' => 'required|string',
+            'version' => 'required|string',
+        ]);
+
+        $provider = MinecraftPluginProvider::from($validated['provider']);
+        $service = $this->getPluginService($provider);
+        $downloadDetails = $service->getDownloadDetails($validated['plugin_id'], $validated['version']);
+
+        $pullPayload = [
+            'url' => $downloadDetails['downloadUrl'],
+            'directory' => '/plugins',
+            'filename' => $downloadDetails['fileName'] ?? null,
+            'use_header' => $downloadDetails['use_header'] ?? true,
+            'foreground' => false,
+        ];
 
         try {
-            $pullOptions = [
-                'foreground' => true,
-                'filename' => $downloadDetails['fileName'] ?? null,
-                'use_header' => $downloadDetails['use_header'] ?? true,
-            ];
-
-            foreach ($downloadDetails as $key => $value) {
-                if (!in_array($key, ['downloadUrl', 'fileName', 'use_header'])) {
-                    $pullOptions[$key] = $value;
-                }
-            }
-
-            $this->getFileRepository($server)->pull(
-                $downloadDetails['downloadUrl'],
-                '/plugins',
-                $pullOptions
+            $subRequest = Request::create(
+                "/api/client/servers/{$server->uuid}/files/pull",
+                'POST',
+                $pullPayload,
+                $request->cookies->all(),
+                [],
+                $request->server->all()
             );
-        } catch (\Exception $e) {
-            logger()->error('Failed to download plugin', [
-                'provider' => $provider->value,
-                'plugin_id' => $pluginId,
-                'version_id' => $versionId,
-                'error' => $e->getMessage(),
-            ]);
 
-            throw new DisplayException('Manual download required from ' . $downloadDetails['downloadUrl']);
+            if ($request->hasSession()) {
+                $subRequest->setLaravelSession($request->session());
+            }
+            $subRequest->setUserResolver($request->getUserResolver());
+            $subRequest->headers->replace($request->headers->all());
+
+            app()->handle($subRequest);
+        } catch (\Throwable $e) {
+            logger()->warning('Internal file pull dispatch failed', ['error' => $e->getMessage()]);
         }
 
-        return response()->noContent();
+        return response()->json([
+            'success' => true,
+            'url' => $downloadDetails['downloadUrl'],
+            'filename' => $downloadDetails['fileName'] ?? null,
+            'directory' => '/plugins',
+        ]);
     }
 
     public function getInstalledPluginsVersions(Server $server): array
@@ -167,15 +184,6 @@ class MinecraftPluginInstallerController
         $service = $this->getPluginService($provider);
 
         return $service->getPluginLoaders();
-    }
-
-    protected function getFileRepository(Server $server): DaemonFileRepository
-    {
-        $repository = app()->bound(DaemonFileRepository::class)
-            ? app(DaemonFileRepository::class)
-            : new DaemonFileRepository(app());
-
-        return $repository->setServer($server);
     }
 
     protected function getPluginService(MinecraftPluginProvider $provider): AbstractPluginService

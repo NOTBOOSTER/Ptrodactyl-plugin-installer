@@ -163,10 +163,11 @@ export function InstallModal({
                                 <select
                                     value={selectedVersionId}
                                     onChange={(e) => setSelectedVersionId(e.target.value)}
+                                    style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
                                     className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                                 >
                                     {versions.map((version) => (
-                                        <option key={version.id} value={version.id}>
+                                        <option key={version.id} value={version.id} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
                                             {version.name}
                                             {version.game_versions && version.game_versions.length > 0
                                                 ? ` (MC: ${version.game_versions.slice(0, 3).join(', ')})`
