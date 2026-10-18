@@ -20,13 +20,13 @@ Developed by **Bhaskar** ([StrayStudios](https://github.com/StrayStudios)).
 ## Installation
 
 ### From Pre-built Package
-1. Download the `minecraft-plugin-installer.pteroext` release archive.
+1. Download the `ptrodactyl-plugin-installer.pteroext` release archive.
 2. In your Pterodactyl 2.0 Admin Area, navigate to **Admin → Extensions**.
 3. Upload the `.pteroext` file and click **Enable**.
 
 Or install via CLI from the panel root:
 ```bash
-php artisan p:extension:install extensions/minecraft-plugin-installer --enable
+php artisan p:extension:install extensions/ptrodactyl-plugin-installer --enable
 ```
 
 ---
@@ -55,7 +55,7 @@ npm run build
 
 Package the extension for distribution:
 ```bash
-php artisan p:extension:pack extensions/minecraft-plugin-installer --output=minecraft-plugin-installer.pteroext
+php artisan p:extension:pack extensions/ptrodactyl-plugin-installer --output=ptrodactyl-plugin-installer.pteroext
 ```
 
 ---

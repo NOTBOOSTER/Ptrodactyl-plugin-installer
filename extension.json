@@ -1,7 +1,7 @@
 {
     "$schema": "./node_modules/@pterodactyl/sdk/manifest.schema.json",
-    "id": "minecraft-plugin-installer",
-    "name": "Minecraft Plugin Installer",
+    "id": "ptrodactyl-plugin-installer",
+    "name": "Ptrodactyl Plugin Installer",
     "version": "2.0.0",
     "description": "Search and install Minecraft plugins from Modrinth, SpigotMC, CurseForge, and Hangar directly from the panel.",
     "author": "StrayStudios (Developer: Bhaskar)",
@@ -18,7 +18,7 @@
     "ui": {
         "entry": "dist/client.js",
         "mode": "native",
-        "prefix": "mpi",
+        "prefix": "ppi",
         "screens": [
             {
                 "id": "plugins",

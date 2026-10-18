@@ -6,7 +6,7 @@ import type {
     SearchFilters,
 } from './types';
 
-const baseUrl = (server: string) => `/api/client/servers/${server}/extensions/minecraft-plugin-installer/plugins`;
+const baseUrl = (server: string) => `/api/client/servers/${server}/extensions/ptrodactyl-plugin-installer/plugins`;
 
 export async function searchPlugins(
     serverIdentifier: string,

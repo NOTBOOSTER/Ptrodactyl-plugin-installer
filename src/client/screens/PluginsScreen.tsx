@@ -112,31 +112,31 @@ export default function PluginsScreen(): React.JSX.Element {
 
     return (
         <ServerContentBlock title="Minecraft Plugins">
-            <div className="mpi:space-y-6">
-                <div className="mpi:flex mpi:flex-col mpi:gap-4 md:mpi:flex-row md:mpi:items-center md:mpi:justify-between">
+            <div className="ppi:space-y-6">
+                <div className="ppi:flex ppi:flex-col ppi:gap-4 md:ppi:flex-row md:ppi:items-center md:ppi:justify-between">
                     <div>
-                        <h1 className="mpi:text-2xl mpi:font-bold mpi:text-white">Minecraft Plugin Installer</h1>
-                        <p className="mpi:text-sm mpi:text-neutral-400">
+                        <h1 className="ppi:text-2xl ppi:font-bold ppi:text-white">Ptrodactyl Plugin Installer</h1>
+                        <p className="ppi:text-sm ppi:text-neutral-400">
                             Search and install plugins from Modrinth, SpigotMC, CurseForge, and Hangar.
                         </p>
                     </div>
 
-                    <div className="mpi:flex mpi:items-center mpi:gap-2">
-                        <span className="mpi:flex mpi:items-center mpi:gap-1.5 mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-800/80 mpi:px-3 mpi:py-1.5 mpi:text-xs mpi:text-neutral-300">
-                            <CheckCircle2 className="mpi:h-4 mpi:w-4 mpi:text-green-400" />
-                            <span>Installed in /plugins: <strong className="mpi:text-white">{totalInstalledCount}</strong></span>
+                    <div className="ppi:flex ppi:items-center ppi:gap-2">
+                        <span className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800/80 ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:text-neutral-300">
+                            <CheckCircle2 className="ppi:h-4 ppi:w-4 ppi:text-green-400" />
+                            <span>Installed in /plugins: <strong className="ppi:text-white">{totalInstalledCount}</strong></span>
                         </span>
                     </div>
                 </div>
 
                 {!canCreateFiles && (
-                    <div className="mpi:flex mpi:items-center mpi:gap-2 mpi:rounded-xl mpi:border mpi:border-amber-500/30 mpi:bg-amber-500/10 mpi:p-4 mpi:text-sm mpi:text-amber-300">
-                        <AlertCircle className="mpi:h-5 mpi:w-5 mpi:shrink-0 mpi:text-amber-400" />
+                    <div className="ppi:flex ppi:items-center ppi:gap-2 ppi:rounded-xl ppi:border ppi:border-amber-500/30 ppi:bg-amber-500/10 ppi:p-4 ppi:text-sm ppi:text-amber-300">
+                        <AlertCircle className="ppi:h-5 ppi:w-5 ppi:shrink-0 ppi:text-amber-400" />
                         <span>You have read-only access. You can browse plugins, but installing them requires file creation permission.</span>
                     </div>
                 )}
 
-                <div className="mpi:flex mpi:flex-wrap mpi:gap-2 mpi:border-b mpi:border-neutral-800 mpi:pb-4">
+                <div className="ppi:flex ppi:flex-wrap ppi:gap-2 ppi:border-b ppi:border-neutral-800 ppi:pb-4">
                     {PROVIDERS.map((prov) => {
                         const isActive = filters.provider === prov.value;
                         return (
@@ -144,10 +144,10 @@ export default function PluginsScreen(): React.JSX.Element {
                                 key={prov.value}
                                 type="button"
                                 onClick={() => handleProviderChange(prov.value)}
-                                className={`mpi:rounded-lg mpi:px-4 mpi:py-2 mpi:text-sm mpi:font-medium mpi:transition-all ${
+                                className={`ppi:rounded-lg ppi:px-4 ppi:py-2 ppi:text-sm ppi:font-medium ppi:transition-all ${
                                     isActive
-                                        ? 'mpi:bg-blue-600 mpi:text-white mpi:shadow-sm'
-                                        : 'mpi:bg-neutral-800/80 mpi:text-neutral-300 hover:mpi:bg-neutral-700 hover:mpi:text-white'
+                                        ? 'ppi:bg-blue-600 ppi:text-white ppi:shadow-sm'
+                                        : 'ppi:bg-neutral-800/80 ppi:text-neutral-300 hover:ppi:bg-neutral-700 hover:ppi:text-white'
                                 }`}
                             >
                                 {prov.label}
@@ -156,19 +156,19 @@ export default function PluginsScreen(): React.JSX.Element {
                     })}
                 </div>
 
-                <div className="mpi:grid mpi:grid-cols-1 mpi:gap-3 sm:mpi:grid-cols-2 md:mpi:grid-cols-12">
-                    <form onSubmit={handleSearchSubmit} className="md:mpi:col-span-5 mpi:relative">
+                <div className="ppi:grid ppi:grid-cols-1 ppi:gap-3 sm:ppi:grid-cols-2 md:ppi:grid-cols-12">
+                    <form onSubmit={handleSearchSubmit} className="md:ppi:col-span-5 ppi:relative">
                         <input
                             type="text"
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             placeholder="Search plugins by name, keyword, or author..."
-                            className="mpi:w-full mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-900 mpi:py-2.5 mpi:pl-10 mpi:pr-4 mpi:text-sm mpi:text-white mpi:placeholder-neutral-500 mpi:outline-none hover:mpi:border-neutral-600 focus:mpi:border-blue-500"
+                            className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:py-2.5 ppi:pl-10 ppi:pr-4 ppi:text-sm ppi:text-white ppi:placeholder-neutral-500 ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                         />
-                        <Search className="mpi:absolute mpi:left-3 mpi:top-3 mpi:h-4 mpi:w-4 mpi:text-neutral-500" />
+                        <Search className="ppi:absolute ppi:left-3 ppi:top-3 ppi:h-4 ppi:w-4 ppi:text-neutral-500" />
                     </form>
 
-                    <div className="md:mpi:col-span-3">
+                    <div className="md:ppi:col-span-3">
                         <select
                             value={filters.minecraftVersion}
                             onChange={(e) => {
@@ -176,7 +176,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                 setFilters((prev) => ({ ...prev, minecraftVersion: val }));
                                 setPage(1);
                             }}
-                            className="mpi:w-full mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-900 mpi:px-3 mpi:py-2.5 mpi:text-sm mpi:text-white mpi:outline-none hover:mpi:border-neutral-600 focus:mpi:border-blue-500"
+                            className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                         >
                             <option value="">All MC Versions</option>
                             {mcVersions.map((version) => (
@@ -188,7 +188,7 @@ export default function PluginsScreen(): React.JSX.Element {
                     </div>
 
                     {loaders.length > 0 && (
-                        <div className="md:mpi:col-span-2">
+                        <div className="md:ppi:col-span-2">
                             <select
                                 value={filters.pluginLoader}
                                 onChange={(e) => {
@@ -196,7 +196,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                     setFilters((prev) => ({ ...prev, pluginLoader: val }));
                                     setPage(1);
                                 }}
-                                className="mpi:w-full mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-900 mpi:px-3 mpi:py-2.5 mpi:text-sm mpi:text-white mpi:outline-none hover:mpi:border-neutral-600 focus:mpi:border-blue-500"
+                                className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                             >
                                 <option value="">All Loaders</option>
                                 {loaders.map((loader) => (
@@ -208,9 +208,9 @@ export default function PluginsScreen(): React.JSX.Element {
                         </div>
                     )}
 
-                    <div className={loaders.length > 0 ? 'md:mpi:col-span-2' : 'md:mpi:col-span-4'}>
-                        <div className="mpi:flex mpi:items-center mpi:gap-2">
-                            <SlidersHorizontal className="mpi:h-4 mpi:w-4 mpi:text-neutral-500 mpi:shrink-0" />
+                    <div className={loaders.length > 0 ? 'md:ppi:col-span-2' : 'md:ppi:col-span-4'}>
+                        <div className="ppi:flex ppi:items-center ppi:gap-2">
+                            <SlidersHorizontal className="ppi:h-4 ppi:w-4 ppi:text-neutral-500 ppi:shrink-0" />
                             <select
                                 value={filters.sort}
                                 onChange={(e) => {
@@ -218,7 +218,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                     setFilters((prev) => ({ ...prev, sort: val }));
                                     setPage(1);
                                 }}
-                                className="mpi:w-full mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-900 mpi:px-3 mpi:py-2.5 mpi:text-sm mpi:text-white mpi:outline-none hover:mpi:border-neutral-600 focus:mpi:border-blue-500"
+                                className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                             >
                                 {SORT_OPTIONS.map((opt) => (
                                     <option key={opt.value} value={opt.value}>
@@ -231,26 +231,26 @@ export default function PluginsScreen(): React.JSX.Element {
                 </div>
 
                 {isPluginsLoading ? (
-                    <div className="mpi:flex mpi:h-64 mpi:items-center mpi:justify-center">
+                    <div className="ppi:flex ppi:h-64 ppi:items-center ppi:justify-center">
                         <Spinner centered />
                     </div>
                 ) : isPluginsError ? (
-                    <div className="mpi:rounded-xl mpi:border mpi:border-red-500/30 mpi:bg-red-500/10 mpi:p-6 mpi:text-center">
-                        <AlertCircle className="mpi:mx-auto mpi:h-8 mpi:w-8 mpi:text-red-400" />
-                        <h3 className="mpi:mt-2 mpi:font-semibold mpi:text-white">Failed to load plugins</h3>
-                        <p className="mpi:mt-1 mpi:text-sm mpi:text-red-300">{httpErrorToHuman(pluginsError)}</p>
+                    <div className="ppi:rounded-xl ppi:border ppi:border-red-500/30 ppi:bg-red-500/10 ppi:p-6 ppi:text-center">
+                        <AlertCircle className="ppi:mx-auto ppi:h-8 ppi:w-8 ppi:text-red-400" />
+                        <h3 className="ppi:mt-2 ppi:font-semibold ppi:text-white">Failed to load plugins</h3>
+                        <p className="ppi:mt-1 ppi:text-sm ppi:text-red-300">{httpErrorToHuman(pluginsError)}</p>
                     </div>
                 ) : plugins.length === 0 ? (
-                    <div className="mpi:rounded-2xl mpi:border mpi:border-neutral-800 mpi:bg-neutral-900/50 mpi:p-12 mpi:text-center">
-                        <Search className="mpi:mx-auto mpi:h-12 mpi:w-12 mpi:text-neutral-600" />
-                        <h3 className="mpi:mt-3 mpi:text-base mpi:font-semibold mpi:text-neutral-200">No plugins found</h3>
-                        <p className="mpi:mt-1 mpi:text-sm mpi:text-neutral-400">
+                    <div className="ppi:rounded-2xl ppi:border ppi:border-neutral-800 ppi:bg-neutral-900/50 ppi:p-12 ppi:text-center">
+                        <Search className="ppi:mx-auto ppi:h-12 ppi:w-12 ppi:text-neutral-600" />
+                        <h3 className="ppi:mt-3 ppi:text-base ppi:font-semibold ppi:text-neutral-200">No plugins found</h3>
+                        <p className="ppi:mt-1 ppi:text-sm ppi:text-neutral-400">
                             Try adjusting your search terms or clearing the version filters.
                         </p>
                     </div>
                 ) : (
                     <>
-                        <div className="mpi:grid mpi:grid-cols-1 mpi:gap-4 sm:mpi:grid-cols-2 lg:mpi:grid-cols-3">
+                        <div className="ppi:grid ppi:grid-cols-1 ppi:gap-4 sm:ppi:grid-cols-2 lg:ppi:grid-cols-3">
                             {plugins.map((plugin) => (
                                 <PluginCard
                                     key={`${filters.provider}-${plugin.id}`}
@@ -261,11 +261,11 @@ export default function PluginsScreen(): React.JSX.Element {
                         </div>
 
                         {totalPages > 1 && (
-                            <div className="mpi:flex mpi:items-center mpi:justify-between mpi:border-t mpi:border-neutral-800 mpi:pt-4">
-                                <div className="mpi:flex mpi:items-center mpi:gap-3">
-                                    <span className="mpi:text-xs mpi:text-neutral-400">
-                                        Page <strong className="mpi:text-white">{page}</strong> of{' '}
-                                        <strong className="mpi:text-white">{totalPages}</strong> ({pagination?.total ?? 0} total)
+                            <div className="ppi:flex ppi:items-center ppi:justify-between ppi:border-t ppi:border-neutral-800 ppi:pt-4">
+                                <div className="ppi:flex ppi:items-center ppi:gap-3">
+                                    <span className="ppi:text-xs ppi:text-neutral-400">
+                                        Page <strong className="ppi:text-white">{page}</strong> of{' '}
+                                        <strong className="ppi:text-white">{totalPages}</strong> ({pagination?.total ?? 0} total)
                                     </span>
 
                                     <select
@@ -275,7 +275,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                             setFilters((prev) => ({ ...prev, perPage: newSize }));
                                             setPage(1);
                                         }}
-                                        className="mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-800 mpi:px-2.5 mpi:py-1 mpi:text-xs mpi:text-neutral-200 mpi:outline-none hover:mpi:border-neutral-600 focus:mpi:border-blue-500"
+                                        className="ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800 ppi:px-2.5 ppi:py-1 ppi:text-xs ppi:text-neutral-200 ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                                     >
                                         {PAGE_SIZE_OPTIONS.map((opt) => (
                                             <option key={opt.value} value={opt.value}>
@@ -285,14 +285,14 @@ export default function PluginsScreen(): React.JSX.Element {
                                     </select>
                                 </div>
 
-                                <div className="mpi:flex mpi:items-center mpi:gap-2">
+                                <div className="ppi:flex ppi:items-center ppi:gap-2">
                                     <button
                                         type="button"
                                         disabled={page <= 1}
                                         onClick={() => setPage((p) => Math.max(1, p - 1))}
-                                        className="mpi:flex mpi:items-center mpi:gap-1 mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-800 mpi:px-3 mpi:py-1.5 mpi:text-xs mpi:font-medium mpi:text-neutral-200 hover:mpi:bg-neutral-700 disabled:mpi:opacity-40 disabled:mpi:pointer-events-none"
+                                        className="ppi:flex ppi:items-center ppi:gap-1 ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800 ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:font-medium ppi:text-neutral-200 hover:ppi:bg-neutral-700 disabled:ppi:opacity-40 disabled:ppi:pointer-events-none"
                                     >
-                                        <ChevronLeft className="mpi:h-4 mpi:w-4" />
+                                        <ChevronLeft className="ppi:h-4 ppi:w-4" />
                                         <span>Previous</span>
                                     </button>
 
@@ -300,10 +300,10 @@ export default function PluginsScreen(): React.JSX.Element {
                                         type="button"
                                         disabled={page >= totalPages}
                                         onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                                        className="mpi:flex mpi:items-center mpi:gap-1 mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-800 mpi:px-3 mpi:py-1.5 mpi:text-xs mpi:font-medium mpi:text-neutral-200 hover:mpi:bg-neutral-700 disabled:mpi:opacity-40 disabled:mpi:pointer-events-none"
+                                        className="ppi:flex ppi:items-center ppi:gap-1 ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800 ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:font-medium ppi:text-neutral-200 hover:ppi:bg-neutral-700 disabled:ppi:opacity-40 disabled:ppi:pointer-events-none"
                                     >
                                         <span>Next</span>
-                                        <ChevronRight className="mpi:h-4 mpi:w-4" />
+                                        <ChevronRight className="ppi:h-4 ppi:w-4" />
                                     </button>
                                 </div>
                             </div>

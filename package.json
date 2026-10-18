@@ -1,8 +1,8 @@
 {
-  "name": "minecraft-plugin-installer",
+  "name": "ptrodactyl-plugin-installer",
   "private": true,
   "version": "2.0.0",
-  "description": "Minecraft Plugin Installer extension for Pterodactyl 2.0 by StrayStudios (Bhaskar)",
+  "description": "Ptrodactyl Plugin Installer extension for Pterodactyl 2.0 by StrayStudios (Bhaskar)",
   "type": "module",
   "scripts": {
     "build": "vite build",

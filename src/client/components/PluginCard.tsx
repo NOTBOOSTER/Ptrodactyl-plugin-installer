@@ -23,28 +23,28 @@ export function PluginCard({ plugin, onSelect }: PluginCardProps): React.JSX.Ele
     return (
         <div
             onClick={() => onSelect(plugin)}
-            className="mpi:group mpi:flex mpi:flex-col mpi:justify-between mpi:rounded-xl mpi:border mpi:border-neutral-700 mpi:bg-neutral-800/80 mpi:p-4 mpi:transition-all mpi:duration-200 hover:mpi:-translate-y-0.5 hover:mpi:border-neutral-500 hover:mpi:bg-neutral-800 hover:mpi:shadow-lg mpi:cursor-pointer"
+            className="ppi:group ppi:flex ppi:flex-col ppi:justify-between ppi:rounded-xl ppi:border ppi:border-neutral-700 ppi:bg-neutral-800/80 ppi:p-4 ppi:transition-all ppi:duration-200 hover:ppi:-translate-y-0.5 hover:ppi:border-neutral-500 hover:ppi:bg-neutral-800 hover:ppi:shadow-lg ppi:cursor-pointer"
         >
             <div>
-                <div className="mpi:flex mpi:items-start mpi:gap-3.5">
+                <div className="ppi:flex ppi:items-start ppi:gap-3.5">
                     {plugin.icon_url ? (
                         <img
                             src={plugin.icon_url}
                             alt={plugin.name}
-                            className="mpi:h-14 mpi:w-14 mpi:shrink-0 mpi:rounded-lg mpi:border mpi:border-neutral-600 mpi:bg-neutral-900 mpi:object-cover"
+                            className="ppi:h-14 ppi:w-14 ppi:shrink-0 ppi:rounded-lg ppi:border ppi:border-neutral-600 ppi:bg-neutral-900 ppi:object-cover"
                             onError={(e) => {
                                 (e.currentTarget as HTMLElement).style.display = 'none';
                             }}
                         />
                     ) : (
-                        <div className="mpi:flex mpi:h-14 mpi:w-14 mpi:shrink-0 mpi:items-center mpi:justify-center mpi:rounded-lg mpi:border mpi:border-neutral-600 mpi:bg-neutral-900 mpi:text-neutral-400">
-                            <Package className="mpi:h-7 mpi:w-7" />
+                        <div className="ppi:flex ppi:h-14 ppi:w-14 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:border ppi:border-neutral-600 ppi:bg-neutral-900 ppi:text-neutral-400">
+                            <Package className="ppi:h-7 ppi:w-7" />
                         </div>
                     )}
 
-                    <div className="mpi:min-w-0 mpi:flex-1">
-                        <div className="mpi:flex mpi:items-center mpi:justify-between mpi:gap-2">
-                            <h3 className="mpi:truncate mpi:text-base mpi:font-semibold mpi:text-white group-hover:mpi:text-blue-400 mpi:transition-colors">
+                    <div className="ppi:min-w-0 ppi:flex-1">
+                        <div className="ppi:flex ppi:items-center ppi:justify-between ppi:gap-2">
+                            <h3 className="ppi:truncate ppi:text-base ppi:font-semibold ppi:text-white group-hover:ppi:text-blue-400 ppi:transition-colors">
                                 {plugin.name}
                             </h3>
                             {plugin.url && (
@@ -54,31 +54,31 @@ export function PluginCard({ plugin, onSelect }: PluginCardProps): React.JSX.Ele
                                     rel="noreferrer noopener"
                                     onClick={(e) => e.stopPropagation()}
                                     title="View on source website"
-                                    className="mpi:rounded mpi:p-1 mpi:text-neutral-400 hover:mpi:bg-neutral-700 hover:mpi:text-neutral-200"
+                                    className="ppi:rounded ppi:p-1 ppi:text-neutral-400 hover:ppi:bg-neutral-700 hover:ppi:text-neutral-200"
                                 >
-                                    <ExternalLink className="mpi:h-4 mpi:w-4" />
+                                    <ExternalLink className="ppi:h-4 ppi:w-4" />
                                 </a>
                             )}
                         </div>
 
                         {plugin.author && (
-                            <p className="mpi:text-xs mpi:font-medium mpi:text-neutral-400">
-                                by <span className="mpi:text-neutral-300">{plugin.author}</span>
+                            <p className="ppi:text-xs ppi:font-medium ppi:text-neutral-400">
+                                by <span className="ppi:text-neutral-300">{plugin.author}</span>
                             </p>
                         )}
                     </div>
                 </div>
 
-                <p className="mpi:mt-3 mpi:line-clamp-2 mpi:text-xs mpi:text-neutral-300">
+                <p className="ppi:mt-3 ppi:line-clamp-2 ppi:text-xs ppi:text-neutral-300">
                     {plugin.short_description || 'No description provided.'}
                 </p>
 
                 {plugin.categories && plugin.categories.length > 0 && (
-                    <div className="mpi:mt-3 mpi:flex mpi:flex-wrap mpi:gap-1.5">
+                    <div className="ppi:mt-3 ppi:flex ppi:flex-wrap ppi:gap-1.5">
                         {plugin.categories.slice(0, 3).map((category) => (
                             <span
                                 key={category}
-                                className="mpi:rounded-md mpi:bg-neutral-700/60 mpi:px-2 mpi:py-0.5 mpi:text-[10px] mpi:font-medium mpi:text-neutral-300"
+                                className="ppi:rounded-md ppi:bg-neutral-700/60 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:font-medium ppi:text-neutral-300"
                             >
                                 {category}
                             </span>
@@ -87,24 +87,24 @@ export function PluginCard({ plugin, onSelect }: PluginCardProps): React.JSX.Ele
                 )}
             </div>
 
-            <div className="mpi:mt-4 mpi:flex mpi:items-center mpi:justify-between mpi:border-t mpi:border-neutral-700/60 mpi:pt-3 mpi:text-xs mpi:text-neutral-400">
-                <div className="mpi:flex mpi:items-center mpi:gap-3">
-                    <span className="mpi:flex mpi:items-center mpi:gap-1" title="Total downloads">
-                        <Download className="mpi:h-3.5 mpi:w-3.5" />
+            <div className="ppi:mt-4 ppi:flex ppi:items-center ppi:justify-between ppi:border-t ppi:border-neutral-700/60 ppi:pt-3 ppi:text-xs ppi:text-neutral-400">
+                <div className="ppi:flex ppi:items-center ppi:gap-3">
+                    <span className="ppi:flex ppi:items-center ppi:gap-1" title="Total downloads">
+                        <Download className="ppi:h-3.5 ppi:w-3.5" />
                         <span>{formattedDownloads}</span>
                     </span>
 
                     {plugin.followers !== undefined && plugin.followers !== null && (
-                        <span className="mpi:flex mpi:items-center mpi:gap-1" title="Rating / Stars">
-                            <ThumbsUp className="mpi:h-3.5 mpi:w-3.5" />
+                        <span className="ppi:flex ppi:items-center ppi:gap-1" title="Rating / Stars">
+                            <ThumbsUp className="ppi:h-3.5 ppi:w-3.5" />
                             <span>{plugin.followers.toLocaleString()}</span>
                         </span>
                     )}
                 </div>
 
                 {formattedDate && (
-                    <span className="mpi:flex mpi:items-center mpi:gap-1 mpi:text-[11px]" title="Last updated">
-                        <Calendar className="mpi:h-3 mpi:w-3" />
+                    <span className="ppi:flex ppi:items-center ppi:gap-1 ppi:text-[11px]" title="Last updated">
+                        <Calendar className="ppi:h-3 ppi:w-3" />
                         <span>{formattedDate}</span>
                     </span>
                 )}

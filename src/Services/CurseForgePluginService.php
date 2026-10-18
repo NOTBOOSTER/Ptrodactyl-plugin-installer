@@ -35,7 +35,7 @@ class CurseForgePluginService extends AbstractPluginService
     {
         parent::__construct();
 
-        $apiKey = $settingsRegistry->get('minecraft-plugin-installer')?->get('curseforge_api_key') ?? '';
+        $apiKey = $settingsRegistry->get('ptrodactyl-plugin-installer')?->get('curseforge_api_key') ?? '';
 
         $this->client = new Client([
             'headers' => [
