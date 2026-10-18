@@ -1,0 +1,39 @@
+{
+    "$schema": "./node_modules/@pterodactyl/sdk/manifest.schema.json",
+    "id": "minecraft-plugin-installer",
+    "name": "Minecraft Plugin Installer",
+    "version": "2.0.0",
+    "description": "Search and install Minecraft plugins from Modrinth, SpigotMC, CurseForge, and Hangar directly from the panel.",
+    "author": "StrayStudios (Developer: Bhaskar)",
+    "icon": "package",
+    "requires": {
+        "panel": "^2.0.0-dev",
+        "sdk": "^2.0.0-beta.4",
+        "php": "^8.3"
+    },
+    "provider": "MinecraftPluginInstaller\\MinecraftPluginInstallerProvider",
+    "autoload": {
+        "MinecraftPluginInstaller\\": "src"
+    },
+    "ui": {
+        "entry": "dist/client.js",
+        "mode": "native",
+        "prefix": "mpi",
+        "screens": [
+            {
+                "id": "plugins",
+                "area": "server",
+                "path": "plugins",
+                "nav": {
+                    "label": "Plugins",
+                    "icon": "package",
+                    "order": 50
+                },
+                "permission": [
+                    "file.create",
+                    "file.update"
+                ]
+            }
+        ]
+    }
+}
