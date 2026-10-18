@@ -72,3 +72,10 @@ declare module '@pterodactyl/sdk' {
 
     export function httpErrorToHuman(error: unknown): string;
 }
+
+declare module '@pterodactyl/sdk/vite' {
+    export interface ExtensionConfigOptions {
+        entry?: string;
+    }
+    export function defineExtensionConfig(options?: ExtensionConfigOptions): unknown;
+}
