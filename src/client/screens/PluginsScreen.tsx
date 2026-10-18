@@ -262,10 +262,28 @@ export default function PluginsScreen(): React.JSX.Element {
 
                         {totalPages > 1 && (
                             <div className="mpi:flex mpi:items-center mpi:justify-between mpi:border-t mpi:border-neutral-800 mpi:pt-4">
-                                <span className="mpi:text-xs mpi:text-neutral-400">
-                                    Page <strong className="mpi:text-white">{page}</strong> of{' '}
-                                    <strong className="mpi:text-white">{totalPages}</strong> ({pagination?.total ?? 0} total)
-                                </span>
+                                <div className="mpi:flex mpi:items-center mpi:gap-3">
+                                    <span className="mpi:text-xs mpi:text-neutral-400">
+                                        Page <strong className="mpi:text-white">{page}</strong> of{' '}
+                                        <strong className="mpi:text-white">{totalPages}</strong> ({pagination?.total ?? 0} total)
+                                    </span>
+
+                                    <select
+                                        value={String(filters.perPage)}
+                                        onChange={(e) => {
+                                            const newSize = Number(e.target.value);
+                                            setFilters((prev) => ({ ...prev, perPage: newSize }));
+                                            setPage(1);
+                                        }}
+                                        className="mpi:rounded-lg mpi:border mpi:border-neutral-700 mpi:bg-neutral-800 mpi:px-2.5 mpi:py-1 mpi:text-xs mpi:text-neutral-200 mpi:outline-none hover:mpi:border-neutral-600 focus:mpi:border-blue-500"
+                                    >
+                                        {PAGE_SIZE_OPTIONS.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>
+                                                {opt.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
 
                                 <div className="mpi:flex mpi:items-center mpi:gap-2">
                                     <button
