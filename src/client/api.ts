@@ -1,5 +1,6 @@
 import { http } from '@pterodactyl/sdk';
 import type {
+    InstalledPluginFile,
     PluginProvider,
     PluginSearchResponse,
     PluginVersionsResponse,
@@ -10,7 +11,10 @@ interface FileListItem {
     object: string;
     attributes: {
         name: string;
+        size?: number;
         is_file: boolean;
+        created_at?: string;
+        modified_at?: string;
     };
 }
 
@@ -92,6 +96,33 @@ export async function getInstalledPlugins(
             other: [],
         };
     }
+}
+
+export async function getInstalledPluginFiles(
+    serverIdentifier: string
+): Promise<InstalledPluginFile[]> {
+    try {
+        const { data } = await http.get<FileListResponse>(`/api/client/servers/${serverIdentifier}/files/list`, {
+            params: { directory: '/plugins' },
+        });
+
+        return (data?.data ?? [])
+            .filter((item) => item.attributes.is_file && item.attributes.name.endsWith('.jar'))
+            .map((item) => ({
+                name: item.attributes.name,
+                size: item.attributes.size ?? 0,
+                modifiedAt: item.attributes.modified_at || item.attributes.created_at || '',
+            }));
+    } catch {
+        return [];
+    }
+}
+
+export async function deletePluginFile(serverIdentifier: string, fileName: string): Promise<void> {
+    await http.post(`/api/client/servers/${serverIdentifier}/files/delete`, {
+        root: '/plugins',
+        files: [fileName],
+    });
 }
 
 export async function getPluginVersions(

@@ -37,6 +37,9 @@ export interface PluginVersionItem {
     game_versions?: string[];
     platforms?: string[];
     releaseDate?: number | null;
+    downloads?: number | null;
+    published_at?: string | null;
+    url?: string | null;
 }
 
 export interface PluginProjectDetails {
@@ -48,11 +51,21 @@ export interface PluginProjectDetails {
     followers?: number | null;
     updated_at?: string;
     author?: string;
+    categories?: string[];
+    loaders?: string[];
+    game_versions?: string[];
+    url?: string;
 }
 
 export interface PluginVersionsResponse {
     project: PluginProjectDetails;
     versions: PluginVersionItem[];
+}
+
+export interface InstalledPluginFile {
+    name: string;
+    size: number;
+    modifiedAt: string;
 }
 
 export interface SearchFilters {

@@ -7,11 +7,19 @@ import {
     useCurrentServerRequired,
     useServerPermission,
 } from '@pterodactyl/sdk';
-import { Search, SlidersHorizontal, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import {
+    Search,
+    ChevronLeft,
+    ChevronRight,
+    AlertCircle,
+    Puzzle,
+} from 'lucide-react';
 import { searchPlugins, getMinecraftVersions, getPluginLoaders, getInstalledPlugins } from '../api';
 import { PluginCard } from '../components/PluginCard';
 import { InstallModal } from '../components/InstallModal';
-import type { FilterOption, PluginItem, PluginProvider, PluginSort, SearchFilters } from '../types';
+import { PluginDetailsView } from '../components/PluginDetailsView';
+import { ManagePluginsView } from '../components/ManagePluginsView';
+import type { PluginItem, PluginProvider, PluginSort, SearchFilters } from '../types';
 
 const PROVIDERS: Array<{ value: PluginProvider; label: string }> = [
     { value: 'modrinth', label: 'Modrinth' },
@@ -22,14 +30,8 @@ const PROVIDERS: Array<{ value: PluginProvider; label: string }> = [
 
 const SORT_OPTIONS: Array<{ value: PluginSort; label: string }> = [
     { value: 'relevance', label: 'Relevance' },
-    { value: 'downloads', label: 'Most Downloads' },
+    { value: 'downloads', label: 'Downloads' },
     { value: 'updated', label: 'Recently Updated' },
-];
-
-const PAGE_SIZE_OPTIONS: FilterOption[] = [
-    { value: '12', label: '12 per page' },
-    { value: '24', label: '24 per page' },
-    { value: '36', label: '36 per page' },
 ];
 
 export default function PluginsScreen(): React.JSX.Element {
@@ -37,6 +39,9 @@ export default function PluginsScreen(): React.JSX.Element {
     const identifier = server.attributes.identifier;
     const canCreateFiles = useServerPermission('file.create');
     const queryClient = useQueryClient();
+
+    const [currentView, setCurrentView] = useState<'browse' | 'manage'>('browse');
+    const [selectedPluginForDetails, setSelectedPluginForDetails] = useState<PluginItem | null>(null);
 
     const [page, setPage] = useState<number>(1);
     const [, startTransition] = useTransition();
@@ -46,12 +51,12 @@ export default function PluginsScreen(): React.JSX.Element {
         provider: 'modrinth',
         minecraftVersion: '',
         pluginLoader: '',
-        perPage: 12,
+        perPage: 24,
         sort: 'relevance',
     });
 
     const [searchInput, setSearchInput] = useState<string>('');
-    const [selectedPlugin, setSelectedPlugin] = useState<PluginItem | null>(null);
+    const [selectedPluginForInstall, setSelectedPluginForInstall] = useState<PluginItem | null>(null);
     const [isInstallOpen, setIsInstallOpen] = useState<boolean>(false);
 
     const {
@@ -62,6 +67,7 @@ export default function PluginsScreen(): React.JSX.Element {
     } = useQuery({
         queryKey: ['plugins', identifier, page, filters],
         queryFn: () => searchPlugins(identifier, page, filters),
+        enabled: currentView === 'browse' && !selectedPluginForDetails,
     });
 
     const { data: mcVersions = [] } = useQuery({
@@ -73,11 +79,6 @@ export default function PluginsScreen(): React.JSX.Element {
         queryKey: ['plugin-loaders', identifier, filters.provider],
         queryFn: () => getPluginLoaders(identifier, filters.provider),
         enabled: filters.provider === 'modrinth' || filters.provider === 'hangar',
-    });
-
-    const { data: installedData } = useQuery({
-        queryKey: ['installed-plugins', identifier],
-        queryFn: () => getInstalledPlugins(identifier),
     });
 
     const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -100,35 +101,22 @@ export default function PluginsScreen(): React.JSX.Element {
         });
     };
 
-    const handleSelectPlugin = (plugin: PluginItem) => {
-        setSelectedPlugin(plugin);
+    const handleOpenInstall = (plugin: PluginItem) => {
+        setSelectedPluginForInstall(plugin);
         setIsInstallOpen(true);
+    };
+
+    const handleViewDetails = (plugin: PluginItem) => {
+        setSelectedPluginForDetails(plugin);
     };
 
     const plugins = searchData?.data ?? [];
     const pagination = searchData?.meta?.pagination;
     const totalPages = pagination?.total_pages ?? 1;
-    const totalInstalledCount = (installedData?.identified?.length ?? 0) + (installedData?.other?.length ?? 0);
 
     return (
         <ServerContentBlock title="Minecraft Plugins">
             <div className="ppi:space-y-6">
-                <div className="ppi:flex ppi:flex-col ppi:gap-4 md:ppi:flex-row md:ppi:items-center md:ppi:justify-between">
-                    <div>
-                        <h1 className="ppi:text-2xl ppi:font-bold ppi:text-white">Ptrodactyl Plugin Installer</h1>
-                        <p className="ppi:text-sm ppi:text-neutral-400">
-                            Search and install plugins from Modrinth, SpigotMC, CurseForge, and Hangar.
-                        </p>
-                    </div>
-
-                    <div className="ppi:flex ppi:items-center ppi:gap-2">
-                        <span className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800/80 ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:text-neutral-300">
-                            <CheckCircle2 className="ppi:h-4 ppi:w-4 ppi:text-green-400" />
-                            <span>Installed in /plugins: <strong className="ppi:text-white">{totalInstalledCount}</strong></span>
-                        </span>
-                    </div>
-                </div>
-
                 {!canCreateFiles && (
                     <div className="ppi:flex ppi:items-center ppi:gap-2 ppi:rounded-xl ppi:border ppi:border-amber-500/30 ppi:bg-amber-500/10 ppi:p-4 ppi:text-sm ppi:text-amber-300">
                         <AlertCircle className="ppi:h-5 ppi:w-5 ppi:shrink-0 ppi:text-amber-400" />
@@ -136,186 +124,273 @@ export default function PluginsScreen(): React.JSX.Element {
                     </div>
                 )}
 
-                <div className="ppi:flex ppi:flex-wrap ppi:gap-2 ppi:border-b ppi:border-neutral-800 ppi:pb-4">
-                    {PROVIDERS.map((prov) => {
-                        const isActive = filters.provider === prov.value;
-                        return (
-                            <button
-                                key={prov.value}
-                                type="button"
-                                onClick={() => handleProviderChange(prov.value)}
-                                className={`ppi:rounded-lg ppi:px-4 ppi:py-2 ppi:text-sm ppi:font-medium ppi:transition-all ${
-                                    isActive
-                                        ? 'ppi:bg-blue-600 ppi:text-white ppi:shadow-sm'
-                                        : 'ppi:bg-neutral-800/80 ppi:text-neutral-300 hover:ppi:bg-neutral-700 hover:ppi:text-white'
-                                }`}
-                            >
-                                {prov.label}
-                            </button>
-                        );
-                    })}
-                </div>
-
-                <div className="ppi:grid ppi:grid-cols-1 ppi:gap-3 sm:ppi:grid-cols-2 md:ppi:grid-cols-12">
-                    <form onSubmit={handleSearchSubmit} className="md:ppi:col-span-5 ppi:relative">
-                        <input
-                            type="text"
-                            value={searchInput}
-                            onChange={(e) => setSearchInput(e.target.value)}
-                            placeholder="Search plugins by name, keyword, or author..."
-                            className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:py-2.5 ppi:pl-10 ppi:pr-4 ppi:text-sm ppi:text-white ppi:placeholder-neutral-500 ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
-                        />
-                        <Search className="ppi:absolute ppi:left-3 ppi:top-3 ppi:h-4 ppi:w-4 ppi:text-neutral-500" />
-                    </form>
-
-                    <div className="md:ppi:col-span-3">
-                        <select
-                            value={filters.minecraftVersion}
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                setFilters((prev) => ({ ...prev, minecraftVersion: val }));
-                                setPage(1);
+                <div className="ppi:flex ppi:justify-center">
+                    <div className="ppi:flex ppi:w-full ppi:max-w-md ppi:items-center ppi:gap-1 ppi:rounded-2xl ppi:border ppi:border-neutral-700/60 ppi:bg-[#18202c]/90 ppi:p-1.5 ppi:shadow-sm">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setCurrentView('browse');
+                                setSelectedPluginForDetails(null);
                             }}
-                            style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
-                            className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
+                            className={`ppi:flex ppi:flex-1 ppi:items-center ppi:justify-center ppi:gap-2 ppi:rounded-xl ppi:py-2 ppi:text-xs sm:ppi:text-sm ppi:font-medium ppi:transition-all ${
+                                currentView === 'browse'
+                                    ? 'ppi:bg-blue-600/20 ppi:text-blue-400 ppi:shadow-sm'
+                                    : 'ppi:text-neutral-400 hover:ppi:text-white hover:ppi:bg-neutral-800/60'
+                            }`}
                         >
-                            <option value="" style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
-                                All MC Versions
-                            </option>
-                            {mcVersions.map((version) => (
-                                <option key={version} value={version} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
-                                    MC {version}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                            <Search className="ppi:h-4 ppi:w-4" />
+                            <span>Browse Plugins</span>
+                        </button>
 
-                    {loaders.length > 0 && (
-                        <div className="md:ppi:col-span-2">
-                            <select
-                                value={filters.pluginLoader}
-                                onChange={(e) => {
-                                    const val = e.target.value;
-                                    setFilters((prev) => ({ ...prev, pluginLoader: val }));
-                                    setPage(1);
-                                }}
-                                style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
-                                className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
-                            >
-                                <option value="" style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
-                                    All Loaders
-                                </option>
-                                {loaders.map((loader) => (
-                                    <option key={loader} value={loader} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
-                                        {loader}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
-
-                    <div className={loaders.length > 0 ? 'md:ppi:col-span-2' : 'md:ppi:col-span-4'}>
-                        <div className="ppi:flex ppi:items-center ppi:gap-2">
-                            <SlidersHorizontal className="ppi:h-4 ppi:w-4 ppi:text-neutral-500 ppi:shrink-0" />
-                            <select
-                                value={filters.sort}
-                                onChange={(e) => {
-                                    const val = e.target.value as PluginSort;
-                                    setFilters((prev) => ({ ...prev, sort: val }));
-                                    setPage(1);
-                                }}
-                                style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
-                                className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-900 ppi:px-3 ppi:py-2.5 ppi:text-sm ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
-                            >
-                                {SORT_OPTIONS.map((opt) => (
-                                    <option key={opt.value} value={opt.value} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
-                                        {opt.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setCurrentView('manage');
+                                setSelectedPluginForDetails(null);
+                            }}
+                            className={`ppi:flex ppi:flex-1 ppi:items-center ppi:justify-center ppi:gap-2 ppi:rounded-xl ppi:py-2 ppi:text-xs sm:ppi:text-sm ppi:font-medium ppi:transition-all ${
+                                currentView === 'manage'
+                                    ? 'ppi:bg-blue-600/20 ppi:text-blue-400 ppi:shadow-sm'
+                                    : 'ppi:text-neutral-400 hover:ppi:text-white hover:ppi:bg-neutral-800/60'
+                            }`}
+                        >
+                            <Puzzle className="ppi:h-4 ppi:w-4" />
+                            <span>Manage Plugins</span>
+                        </button>
                     </div>
                 </div>
 
-                {isPluginsLoading ? (
-                    <div className="ppi:flex ppi:h-64 ppi:items-center ppi:justify-center">
-                        <Spinner centered />
-                    </div>
-                ) : isPluginsError ? (
-                    <div className="ppi:rounded-xl ppi:border ppi:border-red-500/30 ppi:bg-red-500/10 ppi:p-6 ppi:text-center">
-                        <AlertCircle className="ppi:mx-auto ppi:h-8 ppi:w-8 ppi:text-red-400" />
-                        <h3 className="ppi:mt-2 ppi:font-semibold ppi:text-white">Failed to load plugins</h3>
-                        <p className="ppi:mt-1 ppi:text-sm ppi:text-red-300">{httpErrorToHuman(pluginsError)}</p>
-                    </div>
-                ) : plugins.length === 0 ? (
-                    <div className="ppi:rounded-2xl ppi:border ppi:border-neutral-800 ppi:bg-neutral-900/50 ppi:p-12 ppi:text-center">
-                        <Search className="ppi:mx-auto ppi:h-12 ppi:w-12 ppi:text-neutral-600" />
-                        <h3 className="ppi:mt-3 ppi:text-base ppi:font-semibold ppi:text-neutral-200">No plugins found</h3>
-                        <p className="ppi:mt-1 ppi:text-sm ppi:text-neutral-400">
-                            Try adjusting your search terms or clearing the version filters.
-                        </p>
-                    </div>
+                {currentView === 'manage' ? (
+                    <ManagePluginsView
+                        serverIdentifier={identifier}
+                        onBrowseClick={() => setCurrentView('browse')}
+                    />
+                ) : selectedPluginForDetails ? (
+                    <PluginDetailsView
+                        plugin={selectedPluginForDetails}
+                        serverIdentifier={identifier}
+                        provider={filters.provider}
+                        onBack={() => setSelectedPluginForDetails(null)}
+                        onInstalled={() => {
+                            queryClient.invalidateQueries({ queryKey: ['installed-plugins', identifier] });
+                            queryClient.invalidateQueries({ queryKey: ['installed-plugin-files', identifier] });
+                        }}
+                    />
                 ) : (
-                    <>
-                        <div className="ppi:grid ppi:grid-cols-1 ppi:gap-4 sm:ppi:grid-cols-2 lg:ppi:grid-cols-3">
-                            {plugins.map((plugin) => (
-                                <PluginCard
-                                    key={`${filters.provider}-${plugin.id}`}
-                                    plugin={plugin}
-                                    onSelect={handleSelectPlugin}
-                                />
-                            ))}
-                        </div>
-
-                        {totalPages > 1 && (
-                            <div className="ppi:flex ppi:items-center ppi:justify-between ppi:border-t ppi:border-neutral-800 ppi:pt-4">
-                                <div className="ppi:flex ppi:items-center ppi:gap-3">
-                                    <span className="ppi:text-xs ppi:text-neutral-400">
-                                        Page <strong className="ppi:text-white">{page}</strong> of{' '}
-                                        <strong className="ppi:text-white">{totalPages}</strong> ({pagination?.total ?? 0} total)
-                                    </span>
-
+                    <div className="ppi:space-y-6">
+                        <div className="ppi:rounded-2xl ppi:border ppi:border-neutral-700/60 ppi:bg-[#18202c]/90 ppi:p-4 ppi:shadow-sm">
+                            <form
+                                onSubmit={handleSearchSubmit}
+                                className="ppi:grid ppi:grid-cols-2 ppi:gap-3 sm:ppi:grid-cols-3 lg:ppi:grid-cols-6"
+                            >
+                                <div>
+                                    <label className="ppi:block ppi:text-[11px] ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-neutral-400 ppi:mb-1.5">
+                                        Provider
+                                    </label>
                                     <select
-                                        value={String(filters.perPage)}
+                                        value={filters.provider}
+                                        onChange={(e) => handleProviderChange(e.target.value as PluginProvider)}
+                                        style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
+                                        className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700/80 ppi:bg-neutral-900/90 ppi:px-2.5 ppi:py-2 ppi:text-xs ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
+                                    >
+                                        {PROVIDERS.map((prov) => (
+                                            <option
+                                                key={prov.value}
+                                                value={prov.value}
+                                                style={{ backgroundColor: '#171717', color: '#ffffff' }}
+                                                className="ppi:bg-neutral-900 ppi:text-white"
+                                            >
+                                                {prov.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="ppi:block ppi:text-[11px] ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-neutral-400 ppi:mb-1.5">
+                                        Size
+                                    </label>
+                                    <select
+                                        value={filters.perPage}
                                         onChange={(e) => {
-                                            const newSize = Number(e.target.value);
-                                            setFilters((prev) => ({ ...prev, perPage: newSize }));
+                                            const val = Number(e.target.value);
+                                            setFilters((prev) => ({ ...prev, perPage: val }));
                                             setPage(1);
                                         }}
-                                        className="ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800 ppi:px-2.5 ppi:py-1 ppi:text-xs ppi:text-neutral-200 ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
+                                        style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
+                                        className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700/80 ppi:bg-neutral-900/90 ppi:px-2.5 ppi:py-2 ppi:text-xs ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                                     >
-                                        {PAGE_SIZE_OPTIONS.map((opt) => (
-                                            <option key={opt.value} value={opt.value}>
+                                        <option value={12} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">12</option>
+                                        <option value={24} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">24</option>
+                                        <option value={36} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">36</option>
+                                        <option value={48} style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">48</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="ppi:block ppi:text-[11px] ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-neutral-400 ppi:mb-1.5">
+                                        Sort By
+                                    </label>
+                                    <select
+                                        value={filters.sort}
+                                        onChange={(e) => {
+                                            const val = e.target.value as PluginSort;
+                                            setFilters((prev) => ({ ...prev, sort: val }));
+                                            setPage(1);
+                                        }}
+                                        style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
+                                        className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700/80 ppi:bg-neutral-900/90 ppi:px-2.5 ppi:py-2 ppi:text-xs ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
+                                    >
+                                        {SORT_OPTIONS.map((opt) => (
+                                            <option
+                                                key={opt.value}
+                                                value={opt.value}
+                                                style={{ backgroundColor: '#171717', color: '#ffffff' }}
+                                                className="ppi:bg-neutral-900 ppi:text-white"
+                                            >
                                                 {opt.label}
                                             </option>
                                         ))}
                                     </select>
                                 </div>
 
-                                <div className="ppi:flex ppi:items-center ppi:gap-2">
-                                    <button
-                                        type="button"
-                                        disabled={page <= 1}
-                                        onClick={() => setPage((p) => Math.max(1, p - 1))}
-                                        className="ppi:flex ppi:items-center ppi:gap-1 ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800 ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:font-medium ppi:text-neutral-200 hover:ppi:bg-neutral-700 disabled:ppi:opacity-40 disabled:ppi:pointer-events-none"
+                                <div>
+                                    <label className="ppi:block ppi:text-[11px] ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-neutral-400 ppi:mb-1.5">
+                                        Loader
+                                    </label>
+                                    <select
+                                        value={filters.pluginLoader}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setFilters((prev) => ({ ...prev, pluginLoader: val }));
+                                            setPage(1);
+                                        }}
+                                        style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
+                                        className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700/80 ppi:bg-neutral-900/90 ppi:px-2.5 ppi:py-2 ppi:text-xs ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
                                     >
-                                        <ChevronLeft className="ppi:h-4 ppi:w-4" />
-                                        <span>Previous</span>
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        disabled={page >= totalPages}
-                                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                                        className="ppi:flex ppi:items-center ppi:gap-1 ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800 ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:font-medium ppi:text-neutral-200 hover:ppi:bg-neutral-700 disabled:ppi:opacity-40 disabled:ppi:pointer-events-none"
-                                    >
-                                        <span>Next</span>
-                                        <ChevronRight className="ppi:h-4 ppi:w-4" />
-                                    </button>
+                                        <option value="" style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
+                                            All Loaders
+                                        </option>
+                                        {loaders.map((loader) => (
+                                            <option
+                                                key={loader}
+                                                value={loader}
+                                                style={{ backgroundColor: '#171717', color: '#ffffff' }}
+                                                className="ppi:bg-neutral-900 ppi:text-white"
+                                            >
+                                                {loader}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
+
+                                <div>
+                                    <label className="ppi:block ppi:text-[11px] ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-neutral-400 ppi:mb-1.5">
+                                        Version
+                                    </label>
+                                    <select
+                                        value={filters.minecraftVersion}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setFilters((prev) => ({ ...prev, minecraftVersion: val }));
+                                            setPage(1);
+                                        }}
+                                        style={{ backgroundColor: '#171717', color: '#ffffff', colorScheme: 'dark' }}
+                                        className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700/80 ppi:bg-neutral-900/90 ppi:px-2.5 ppi:py-2 ppi:text-xs ppi:text-white ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
+                                    >
+                                        <option value="" style={{ backgroundColor: '#171717', color: '#ffffff' }} className="ppi:bg-neutral-900 ppi:text-white">
+                                            All Versions
+                                        </option>
+                                        {mcVersions.map((version) => (
+                                            <option
+                                                key={version}
+                                                value={version}
+                                                style={{ backgroundColor: '#171717', color: '#ffffff' }}
+                                                className="ppi:bg-neutral-900 ppi:text-white"
+                                            >
+                                                {version}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="ppi:col-span-2 sm:ppi:col-span-1 lg:ppi:col-span-1">
+                                    <label className="ppi:block ppi:text-[11px] ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-neutral-400 ppi:mb-1.5">
+                                        Search
+                                    </label>
+                                    <div className="ppi:relative">
+                                        <input
+                                            type="text"
+                                            value={searchInput}
+                                            onChange={(e) => setSearchInput(e.target.value)}
+                                            placeholder="Search plugins..."
+                                            className="ppi:w-full ppi:rounded-lg ppi:border ppi:border-neutral-700/80 ppi:bg-neutral-900/90 ppi:py-2 ppi:pl-8 ppi:pr-3 ppi:text-xs ppi:text-white ppi:placeholder-neutral-500 ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
+                                        />
+                                        <Search className="ppi:absolute ppi:left-2.5 ppi:top-2.5 ppi:h-3.5 ppi:w-3.5 ppi:text-neutral-500" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        {isPluginsLoading ? (
+                            <div className="ppi:flex ppi:h-64 ppi:items-center ppi:justify-center">
+                                <Spinner centered />
+                            </div>
+                        ) : isPluginsError ? (
+                            <div className="ppi:rounded-2xl ppi:border ppi:border-red-500/30 ppi:bg-red-500/10 ppi:p-6 ppi:text-center">
+                                <AlertCircle className="ppi:mx-auto ppi:h-8 ppi:w-8 ppi:text-red-400" />
+                                <h3 className="ppi:mt-2 ppi:font-semibold ppi:text-white">Failed to load plugins</h3>
+                                <p className="ppi:mt-1 ppi:text-xs ppi:text-neutral-400">{httpErrorToHuman(pluginsError)}</p>
+                            </div>
+                        ) : plugins.length === 0 ? (
+                            <div className="ppi:rounded-2xl ppi:border ppi:border-neutral-700/60 ppi:bg-[#18202c]/80 ppi:p-12 ppi:text-center">
+                                <Search className="ppi:mx-auto ppi:h-10 ppi:w-10 ppi:text-neutral-500" />
+                                <h3 className="ppi:mt-3 ppi:font-semibold ppi:text-white">No plugins found</h3>
+                                <p className="ppi:mt-1 ppi:text-xs ppi:text-neutral-400">
+                                    Try adjusting your search keywords, version, or provider filters.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="ppi:grid ppi:grid-cols-1 ppi:gap-4 md:ppi:grid-cols-2 lg:ppi:grid-cols-3">
+                                {plugins.map((plugin) => (
+                                    <PluginCard
+                                        key={plugin.id}
+                                        plugin={plugin}
+                                        onViewDetails={handleViewDetails}
+                                        onInstall={handleOpenInstall}
+                                    />
+                                ))}
                             </div>
                         )}
-                    </>
+
+                        {totalPages > 1 && (
+                            <div className="ppi:flex ppi:items-center ppi:justify-between ppi:border-t ppi:border-neutral-800 ppi:pt-4">
+                                <button
+                                    type="button"
+                                    disabled={page <= 1}
+                                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                    className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-xl ppi:border ppi:border-neutral-700/70 ppi:bg-neutral-800/80 ppi:px-4 ppi:py-2 ppi:text-xs ppi:font-medium ppi:text-neutral-300 hover:ppi:bg-neutral-700 hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-40"
+                                >
+                                    <ChevronLeft className="ppi:h-4 ppi:w-4" />
+                                    <span>Previous</span>
+                                </button>
+
+                                <span className="ppi:text-xs ppi:text-neutral-400">
+                                    Page <strong className="ppi:text-white">{page}</strong> of <strong className="ppi:text-white">{totalPages}</strong>
+                                </span>
+
+                                <button
+                                    type="button"
+                                    disabled={page >= totalPages}
+                                    onClick={() => setPage((p) => p + 1)}
+                                    className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-xl ppi:border ppi:border-neutral-700/70 ppi:bg-neutral-800/80 ppi:px-4 ppi:py-2 ppi:text-xs ppi:font-medium ppi:text-neutral-300 hover:ppi:bg-neutral-700 hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-40"
+                                >
+                                    <span>Next</span>
+                                    <ChevronRight className="ppi:h-4 ppi:w-4" />
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 )}
             </div>
 
@@ -323,15 +398,16 @@ export default function PluginsScreen(): React.JSX.Element {
                 open={isInstallOpen}
                 onClose={() => {
                     setIsInstallOpen(false);
-                    setSelectedPlugin(null);
+                    setSelectedPluginForInstall(null);
                 }}
-                plugin={selectedPlugin}
+                plugin={selectedPluginForInstall}
                 serverIdentifier={identifier}
                 provider={filters.provider}
                 minecraftVersion={filters.minecraftVersion}
                 pluginLoader={filters.pluginLoader}
                 onInstalled={() => {
                     queryClient.invalidateQueries({ queryKey: ['installed-plugins', identifier] });
+                    queryClient.invalidateQueries({ queryKey: ['installed-plugin-files', identifier] });
                 }}
             />
         </ServerContentBlock>
