@@ -22,13 +22,15 @@ class MinecraftPluginInstallerProvider extends ExtensionProvider
                 ->label('Enable Plugins Navigation Item')
                 ->help('Toggle whether the Plugins navigation item is visible on servers.')
                 ->field('toggle')
-                ->frontend(),
+                ->frontend()
+                ->frontendType('boolean'),
 
             ExtensionSettingDefinition::make('allowed_egg_ids', 'allowed_egg_ids', '', ['nullable', 'string', 'max:255'])
                 ->label('Allowed Egg IDs (Optional)')
-                ->help('Comma-separated list of Egg IDs (e.g. 1, 2, 5) where plugin installation is permitted. Leave blank to allow on all server eggs.')
+                ->help('Comma-separated list of Egg IDs or names/tags (e.g. 1, 19, limbo) permitted. Leave blank for default Minecraft eggs.')
                 ->field('text')
-                ->frontend(),
+                ->frontend()
+                ->frontendType('string'),
         ]));
     }
 }

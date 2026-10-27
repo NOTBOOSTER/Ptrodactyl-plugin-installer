@@ -34,12 +34,7 @@
                     "file.update"
                 ],
                 "when": {
-                    "eggFeatures": {
-                        "any": [
-                            "eula",
-                            "java_version"
-                        ]
-                    }
+                    "runtime": true
                 }
             }
         ]

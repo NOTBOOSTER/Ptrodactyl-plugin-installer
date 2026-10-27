@@ -3,6 +3,7 @@ import { ExternalLink, Info, Package } from 'lucide-react';
 import type { PluginItem } from '../types';
 
 interface PluginCardProps {
+    key?: string;
     plugin: PluginItem;
     onOpenDetails: (plugin: PluginItem) => void;
     onInstall: (plugin: PluginItem) => void;
