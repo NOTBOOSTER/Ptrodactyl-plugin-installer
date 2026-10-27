@@ -63,7 +63,7 @@ export function ManagePluginsView({
         },
     });
 
-    const filteredFiles = files.filter((f) =>
+    const filteredFiles = files.filter((f: InstalledPluginFile) =>
         f.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
     );
 
@@ -72,13 +72,13 @@ export function ManagePluginsView({
             <div className="ppi:flex ppi:flex-col ppi:gap-4 sm:ppi:flex-row sm:ppi:items-center sm:ppi:justify-between">
                 <div>
                     <h2 className="ppi:text-xl ppi:font-bold ppi:text-white">Installed Plugins</h2>
-                    <p className="ppi:text-xs ppi:text-neutral-400">
+                    <p className="ppi:text-xs ppi:text-slate-400">
                         Manage all plugin .jar files currently present in your server&apos;s /plugins folder.
                     </p>
                 </div>
 
                 <div className="ppi:flex ppi:items-center ppi:gap-2">
-                    <span className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-lg ppi:border ppi:border-neutral-700 ppi:bg-neutral-800/80 ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:text-neutral-300">
+                    <span className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-lg ppi:border ppi:border-slate-700/80 ppi:bg-[#202936] ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:text-slate-300">
                         <CheckCircle2 className="ppi:h-4 ppi:w-4 ppi:text-green-400" />
                         <span>Total: <strong className="ppi:text-white">{files.length}</strong></span>
                     </span>
@@ -87,7 +87,7 @@ export function ManagePluginsView({
                         type="button"
                         onClick={() => refetch()}
                         disabled={isRefetching || isLoading}
-                        className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-lg ppi:border ppi:border-neutral-700/80 ppi:bg-neutral-800/90 ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:font-medium ppi:text-neutral-200 hover:ppi:bg-neutral-700 hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-50"
+                        className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-lg ppi:border ppi:border-slate-700/80 ppi:bg-[#202936] ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:font-medium ppi:text-slate-200 hover:ppi:bg-slate-700 hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-50"
                         title="Refresh installed files"
                     >
                         <RefreshCw className={`ppi:h-3.5 ppi:w-3.5 ${isRefetching ? 'ppi:animate-spin' : ''}`} />
@@ -102,13 +102,13 @@ export function ManagePluginsView({
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Filter installed plugins..."
-                    className="ppi:w-full ppi:rounded-xl ppi:border ppi:border-neutral-700/80 ppi:bg-neutral-900/90 ppi:py-2.5 ppi:pl-10 ppi:pr-4 ppi:text-sm ppi:text-white ppi:placeholder-neutral-500 ppi:outline-none hover:ppi:border-neutral-600 focus:ppi:border-blue-500"
+                    className="ppi:w-full ppi:rounded-xl ppi:border ppi:border-slate-700/80 ppi:bg-[#202936] ppi:py-2.5 ppi:pl-10 ppi:pr-4 ppi:text-sm ppi:text-white ppi:placeholder-slate-500 ppi:outline-none hover:ppi:border-slate-600 focus:ppi:border-blue-500"
                 />
-                <Search className="ppi:absolute ppi:left-3.5 ppi:top-3.5 ppi:h-4 ppi:w-4 ppi:text-neutral-500" />
+                <Search className="ppi:absolute ppi:left-3.5 ppi:top-3.5 ppi:h-4 ppi:w-4 ppi:text-slate-500" />
             </div>
 
             {isLoading ? (
-                <div className="ppi:flex ppi:h-48 ppi:items-center ppi:justify-center ppi:rounded-2xl ppi:border ppi:border-neutral-700/60 ppi:bg-[#18202c]/80">
+                <div className="ppi:flex ppi:h-48 ppi:items-center ppi:justify-center ppi:rounded-2xl ppi:border ppi:border-slate-700/60 ppi:bg-[#202936]">
                     <Spinner centered />
                 </div>
             ) : isError ? (
@@ -117,10 +117,10 @@ export function ManagePluginsView({
                     <p className="ppi:mt-2">Failed to load plugins directory: {httpErrorToHuman(error)}</p>
                 </div>
             ) : files.length === 0 ? (
-                <div className="ppi:rounded-2xl ppi:border ppi:border-neutral-700/60 ppi:bg-[#18202c]/80 ppi:p-10 ppi:text-center">
-                    <FolderOpen className="ppi:mx-auto ppi:h-10 ppi:w-10 ppi:text-neutral-500" />
+                <div className="ppi:rounded-2xl ppi:border ppi:border-slate-700/60 ppi:bg-[#202936] ppi:p-10 ppi:text-center">
+                    <FolderOpen className="ppi:mx-auto ppi:h-10 ppi:w-10 ppi:text-slate-500" />
                     <h3 className="ppi:mt-3 ppi:text-base ppi:font-semibold ppi:text-white">No plugins installed</h3>
-                    <p className="ppi:mt-1 ppi:text-xs ppi:text-neutral-400">
+                    <p className="ppi:mt-1 ppi:text-xs ppi:text-slate-400">
                         The /plugins directory is currently empty or has not been created yet.
                     </p>
                     <button
@@ -133,27 +133,27 @@ export function ManagePluginsView({
                     </button>
                 </div>
             ) : filteredFiles.length === 0 ? (
-                <div className="ppi:rounded-2xl ppi:border ppi:border-neutral-700/60 ppi:bg-[#18202c]/80 ppi:p-8 ppi:text-center ppi:text-sm ppi:text-neutral-400">
+                <div className="ppi:rounded-2xl ppi:border ppi:border-slate-700/60 ppi:bg-[#202936] ppi:p-8 ppi:text-center ppi:text-sm ppi:text-slate-400">
                     No installed plugins match &quot;{searchQuery}&quot;
                 </div>
             ) : (
                 <div className="ppi:grid ppi:grid-cols-1 ppi:gap-3 sm:ppi:grid-cols-2 lg:ppi:grid-cols-3">
-                    {filteredFiles.map((file) => {
+                    {filteredFiles.map((file: InstalledPluginFile) => {
                         const isDeleting = deletingFileName === file.name;
                         return (
                             <div
                                 key={file.name}
-                                className="ppi:flex ppi:items-center ppi:justify-between ppi:gap-3 ppi:rounded-xl ppi:border ppi:border-neutral-700/60 ppi:bg-[#18202c]/90 ppi:p-4 hover:ppi:border-neutral-600 ppi:transition-colors"
+                                className="ppi:flex ppi:items-center ppi:justify-between ppi:gap-3 ppi:rounded-xl ppi:border ppi:border-slate-700/60 ppi:bg-[#2b3544] ppi:p-4 hover:ppi:border-slate-600 ppi:transition-colors"
                             >
                                 <div className="ppi:flex ppi:min-w-0 ppi:items-center ppi:gap-3">
-                                    <div className="ppi:flex ppi:h-10 ppi:w-10 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:bg-neutral-800 ppi:text-blue-400">
+                                    <div className="ppi:flex ppi:h-10 ppi:w-10 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:bg-slate-900 ppi:text-blue-400">
                                         <Package className="ppi:h-5 ppi:w-5" />
                                     </div>
                                     <div className="ppi:min-w-0">
                                         <h4 className="ppi:truncate ppi:text-xs sm:ppi:text-sm ppi:font-semibold ppi:text-white" title={file.name}>
                                             {file.name}
                                         </h4>
-                                        <p className="ppi:text-[11px] ppi:text-neutral-400">
+                                        <p className="ppi:text-[11px] ppi:text-slate-400">
                                             {formatBytes(file.size)}
                                             {file.modifiedAt && (
                                                 <span> · {new Date(file.modifiedAt).toLocaleDateString()}</span>
