@@ -78,7 +78,7 @@ export function ManagePluginsView({
                 </div>
 
                 <div className="ppi:flex ppi:items-center ppi:gap-2">
-                    <span className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-md ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:text-slate-200">
+                    <span className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[40px] ppi:px-4 ppi:text-xs ppi:text-slate-200">
                         <CheckCircle2 className="ppi:h-4 ppi:w-4 ppi:text-green-400" />
                         <span>Total: <strong className="ppi:text-white">{files.length}</strong></span>
                     </span>
@@ -87,7 +87,7 @@ export function ManagePluginsView({
                         type="button"
                         onClick={() => refetch()}
                         disabled={isRefetching || isLoading}
-                        className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-md ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:px-3 ppi:py-1.5 ppi:text-xs ppi:font-medium ppi:text-slate-200 hover:ppi:bg-[#627282] hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-50"
+                        className="ppi:flex ppi:items-center ppi:gap-1.5 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[40px] ppi:px-4 ppi:text-xs ppi:font-bold ppi:text-slate-200 hover:ppi:bg-[#627282] hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-50"
                         title="Refresh installed files"
                     >
                         <RefreshCw className={`ppi:h-3.5 ppi:w-3.5 ${isRefetching ? 'ppi:animate-spin' : ''}`} />
@@ -102,22 +102,22 @@ export function ManagePluginsView({
                     value={searchQuery}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                     placeholder="Filter installed plugins..."
-                    className="ppi:w-full ppi:rounded-md ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:py-2.5 ppi:pl-10 ppi:pr-4 ppi:text-sm ppi:text-white ppi:placeholder-slate-300/60 ppi:outline-none focus:ppi:ring-1 focus:ppi:ring-blue-400"
+                    className="ppi:w-full ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:pl-10 ppi:pr-4 ppi:text-sm ppi:text-white ppi:placeholder-slate-300 ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
                 />
                 <Search className="ppi:absolute ppi:left-3.5 ppi:top-3.5 ppi:h-4 ppi:w-4 ppi:text-slate-300" />
             </div>
 
             {isLoading ? (
-                <div className="ppi:flex ppi:h-48 ppi:items-center ppi:justify-center ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A]">
+                <div className="ppi:flex ppi:h-48 ppi:items-center ppi:justify-center ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A]">
                     <Spinner centered />
                 </div>
             ) : isError ? (
-                <div className="ppi:rounded-xl ppi:border ppi:border-red-500/30 ppi:bg-red-500/10 ppi:p-6 ppi:text-center ppi:text-sm ppi:text-red-300">
+                <div className="ppi:rounded-none ppi:border ppi:border-red-500/30 ppi:bg-red-500/10 ppi:p-6 ppi:text-center ppi:text-sm ppi:text-red-300">
                     <AlertCircle className="ppi:mx-auto ppi:h-6 ppi:w-6 ppi:text-red-400" />
                     <p className="ppi:mt-2">Failed to load plugins directory: {httpErrorToHuman(error)}</p>
                 </div>
             ) : files.length === 0 ? (
-                <div className="ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-10 ppi:text-center">
+                <div className="ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-10 ppi:text-center">
                     <FolderOpen className="ppi:mx-auto ppi:h-10 ppi:w-10 ppi:text-slate-300" />
                     <h3 className="ppi:mt-3 ppi:text-base ppi:font-semibold ppi:text-white">No plugins installed</h3>
                     <p className="ppi:mt-1 ppi:text-xs ppi:text-slate-300">
@@ -126,27 +126,27 @@ export function ManagePluginsView({
                     <button
                         type="button"
                         onClick={onBrowseClick}
-                        className="ppi:mt-5 ppi:inline-flex ppi:items-center ppi:gap-2 ppi:rounded-lg ppi:bg-blue-600 ppi:px-4 ppi:py-2 ppi:text-xs ppi:font-semibold ppi:text-white hover:ppi:bg-blue-500 ppi:transition-colors"
+                        className="ppi:mt-5 ppi:inline-flex ppi:items-center ppi:justify-center ppi:gap-2 ppi:rounded-none ppi:bg-[#2964C3] ppi:h-[44px] ppi:min-w-[180px] ppi:px-6 ppi:text-sm ppi:font-bold ppi:text-white hover:ppi:bg-[#2053a6] ppi:transition-colors"
                     >
-                        <Search className="ppi:h-3.5 ppi:w-3.5" />
+                        <Search className="ppi:h-4 ppi:w-4" />
                         <span>Browse Marketplace</span>
                     </button>
                 </div>
             ) : filteredFiles.length === 0 ? (
-                <div className="ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-8 ppi:text-center ppi:text-sm ppi:text-slate-300">
+                <div className="ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-8 ppi:text-center ppi:text-sm ppi:text-slate-300">
                     No installed plugins match &quot;{searchQuery}&quot;
                 </div>
             ) : (
-                <div className="ppi:grid ppi:grid-cols-1 md:ppi:grid-cols-2 lg:ppi:grid-cols-3 ppi:gap-3">
+                <div className="ppi-plugins-grid">
                     {filteredFiles.map((file: InstalledPluginFile) => {
                         const isDeleting = deletingFileName === file.name;
                         return (
                             <div
                                 key={file.name}
-                                className="ppi:flex ppi:items-center ppi:justify-between ppi:gap-3 ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-4 hover:ppi:border-white/20 ppi:transition-colors"
+                                className="ppi:flex ppi:items-center ppi:justify-between ppi:gap-3 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-4 hover:ppi:border-white/20 ppi:transition-colors"
                             >
                                 <div className="ppi:flex ppi:min-w-0 ppi:items-center ppi:gap-3">
-                                    <div className="ppi:flex ppi:h-10 ppi:w-10 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:bg-[#515F6C] ppi:text-blue-300">
+                                    <div className="ppi:flex ppi:h-10 ppi:w-10 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-none ppi:bg-[#515F6C] ppi:text-blue-300">
                                         <Package className="ppi:h-5 ppi:w-5" />
                                     </div>
                                     <div className="ppi:min-w-0">
@@ -170,7 +170,7 @@ export function ManagePluginsView({
                                             deleteMutation.mutate(file.name);
                                         }
                                     }}
-                                    className="ppi:flex ppi:h-8 ppi:w-8 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:border ppi:border-red-500/20 ppi:bg-red-500/10 ppi:text-red-400 hover:ppi:bg-red-500/20 hover:ppi:text-red-300 ppi:transition-colors disabled:ppi:opacity-50"
+                                    className="ppi:flex ppi:h-9 ppi:w-9 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-none ppi:border ppi:border-red-500/20 ppi:bg-red-500/10 ppi:text-red-400 hover:ppi:bg-red-500/20 hover:ppi:text-red-300 ppi:transition-colors disabled:ppi:opacity-50"
                                     title={`Delete ${file.name}`}
                                 >
                                     {isDeleting ? (
