@@ -23,7 +23,6 @@ import type { PluginItem, PluginProvider, PluginSort, SearchFilters } from '../t
 const PROVIDERS: Array<{ value: PluginProvider; label: string }> = [
     { value: 'modrinth', label: 'Modrinth' },
     { value: 'spigotmc', label: 'SpigotMC' },
-    { value: 'curseforge', label: 'CurseForge' },
     { value: 'hangar', label: 'Hangar' },
 ];
 

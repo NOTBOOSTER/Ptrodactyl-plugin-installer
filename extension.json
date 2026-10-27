@@ -3,7 +3,7 @@
     "id": "ptrodactyl-plugin-installer",
     "name": "Ptrodactyl Plugin Installer",
     "version": "2.0.0",
-    "description": "Search and install Minecraft plugins from Modrinth, SpigotMC, CurseForge, and Hangar directly from the panel.",
+    "description": "Search and install Minecraft plugins from Modrinth, SpigotMC, and Hangar directly from the panel.",
     "author": "StrayStudios (Developer: Bhaskar)",
     "icon": "puzzle",
     "requires": {
@@ -26,7 +26,6 @@
                 "path": "plugins",
                 "nav": {
                     "label": "Plugins",
-                    "icon": "puzzle",
                     "order": 1
                 },
                 "permission": [
@@ -34,7 +33,12 @@
                     "file.update"
                 ],
                 "when": {
-                    "runtime": true
+                    "eggFeatures": {
+                        "any": [
+                            "eula",
+                            "java_version"
+                        ]
+                    }
                 }
             }
         ]
