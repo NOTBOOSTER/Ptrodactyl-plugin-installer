@@ -5,7 +5,7 @@
     "version": "2.0.0",
     "description": "Search and install Minecraft plugins from Modrinth, SpigotMC, CurseForge, and Hangar directly from the panel.",
     "author": "StrayStudios (Developer: Bhaskar)",
-    "icon": "package",
+    "icon": "puzzle",
     "requires": {
         "panel": "^2.0.0-dev",
         "sdk": "^2.0.0-beta.4",
@@ -26,13 +26,21 @@
                 "path": "plugins",
                 "nav": {
                     "label": "Plugins",
-                    "icon": "package",
-                    "order": 50
+                    "icon": "puzzle",
+                    "order": 1
                 },
                 "permission": [
                     "file.create",
                     "file.update"
-                ]
+                ],
+                "when": {
+                    "eggFeatures": {
+                        "any": [
+                            "eula",
+                            "java_version"
+                        ]
+                    }
+                }
             }
         ]
     }

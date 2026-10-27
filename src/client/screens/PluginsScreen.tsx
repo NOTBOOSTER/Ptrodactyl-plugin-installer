@@ -104,7 +104,7 @@ export default function PluginsScreen(): React.JSX.Element {
 
     return (
         <ServerContentBlock title="Minecraft Plugins">
-            <div className="ppi:space-y-6">
+            <div className="ppi:space-y-6 ppi:w-full ppi:max-w-full ppi:overflow-x-hidden">
                 {!canCreateFiles && (
                     <div className="ppi:flex ppi:items-center ppi:gap-2 ppi:rounded-none ppi:border ppi:border-amber-500/30 ppi:bg-amber-500/10 ppi:p-4 ppi:text-sm ppi:text-amber-300">
                         <AlertCircle className="ppi:h-5 ppi:w-5 ppi:shrink-0 ppi:text-amber-400" />
@@ -112,32 +112,32 @@ export default function PluginsScreen(): React.JSX.Element {
                     </div>
                 )}
 
-                <div className="ppi:flex ppi:justify-center">
-                    <div className="ppi:inline-flex ppi:items-center ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-1.5 ppi:shadow-sm">
+                <div className="ppi:flex ppi:justify-center ppi:w-full">
+                    <div className="ppi:flex ppi:w-full ppi:max-w-md ppi:items-center ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-1 ppi:shadow-sm">
                         <button
                             type="button"
                             onClick={() => setCurrentView('browse')}
-                            className={`ppi:flex ppi:items-center ppi:justify-center ppi:gap-2 ppi:rounded-none ppi:h-[44px] ppi:min-w-[160px] ppi:px-8 ppi:text-sm ppi:font-bold ppi:transition-all ${
+                            className={`ppi:flex ppi:flex-1 ppi:min-w-0 ppi:items-center ppi:justify-center ppi:gap-1.5 ppi:rounded-none ppi:h-[44px] ppi:px-2 sm:ppi:px-6 ppi:text-xs sm:ppi:text-sm ppi:font-bold ppi:transition-all ${
                                 currentView === 'browse'
                                     ? 'ppi:bg-[#2964C3] ppi:text-white ppi:shadow-md'
                                     : 'ppi:text-slate-200 hover:ppi:text-white hover:ppi:bg-[#515F6C]'
                             }`}
                         >
-                            <Search className="ppi:h-4 ppi:w-4" />
-                            <span>Browse Plugins</span>
+                            <Search className="ppi:h-4 ppi:w-4 ppi:shrink-0" />
+                            <span className="ppi:truncate">Browse Plugins</span>
                         </button>
 
                         <button
                             type="button"
                             onClick={() => setCurrentView('manage')}
-                            className={`ppi:flex ppi:items-center ppi:justify-center ppi:gap-2 ppi:rounded-none ppi:h-[44px] ppi:min-w-[160px] ppi:px-8 ppi:text-sm ppi:font-bold ppi:transition-all ${
+                            className={`ppi:flex ppi:flex-1 ppi:min-w-0 ppi:items-center ppi:justify-center ppi:gap-1.5 ppi:rounded-none ppi:h-[44px] ppi:px-2 sm:ppi:px-6 ppi:text-xs sm:ppi:text-sm ppi:font-bold ppi:transition-all ${
                                 currentView === 'manage'
                                     ? 'ppi:bg-[#2964C3] ppi:text-white ppi:shadow-md'
                                     : 'ppi:text-slate-200 hover:ppi:text-white hover:ppi:bg-[#515F6C]'
                             }`}
                         >
-                            <Puzzle className="ppi:h-4 ppi:w-4" />
-                            <span>Manage Plugins</span>
+                            <Puzzle className="ppi:h-4 ppi:w-4 ppi:shrink-0" />
+                            <span className="ppi:truncate">Manage Plugins</span>
                         </button>
                     </div>
                 </div>
@@ -148,10 +148,10 @@ export default function PluginsScreen(): React.JSX.Element {
                         onBrowseClick={() => setCurrentView('browse')}
                     />
                 ) : (
-                    <div className="ppi:space-y-6">
-                        <div className="ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-6 ppi:shadow-sm">
+                    <div className="ppi:space-y-6 ppi:w-full ppi:max-w-full">
+                        <div className="ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-4 sm:ppi:p-6 ppi:w-full ppi:max-w-full ppi:box-border ppi:shadow-sm">
                             <form onSubmit={handleSearchSubmit} className="ppi-filter-grid">
-                                <div>
+                                <div className="ppi:min-w-0">
                                     <label className="ppi:block ppi:text-xs ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-slate-200 ppi:mb-2">
                                         SEARCH
                                     </label>
@@ -160,11 +160,11 @@ export default function PluginsScreen(): React.JSX.Element {
                                         value={searchInput}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInput(e.target.value)}
                                         placeholder="e.g. EssentialsX, LuckPerms..."
-                                        className="ppi:w-full ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-4 ppi:text-sm ppi:text-white ppi:placeholder-slate-300 ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
+                                        className="ppi:w-full ppi:max-w-full ppi:box-border ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-3 sm:ppi:px-4 ppi:text-sm ppi:text-white ppi:placeholder-slate-300 ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
                                     />
                                 </div>
 
-                                <div>
+                                <div className="ppi:min-w-0">
                                     <label className="ppi:block ppi:text-xs ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-slate-200 ppi:mb-2">
                                         LOADER
                                     </label>
@@ -176,7 +176,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                             setPage(1);
                                         }}
                                         style={{ backgroundColor: '#515F6C', color: '#ffffff', colorScheme: 'dark' }}
-                                        className="ppi:w-full ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
+                                        className="ppi:w-full ppi:max-w-full ppi:box-border ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-3 sm:ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
                                     >
                                         <option value="" style={{ backgroundColor: '#515F6C', color: '#ffffff' }} className="ppi:bg-[#515F6C] ppi:text-white">
                                             Any plugin loader
@@ -194,7 +194,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                     </select>
                                 </div>
 
-                                <div>
+                                <div className="ppi:min-w-0">
                                     <label className="ppi:block ppi:text-xs ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-slate-200 ppi:mb-2">
                                         MINECRAFT VERSION
                                     </label>
@@ -206,7 +206,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                             setPage(1);
                                         }}
                                         style={{ backgroundColor: '#515F6C', color: '#ffffff', colorScheme: 'dark' }}
-                                        className="ppi:w-full ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
+                                        className="ppi:w-full ppi:max-w-full ppi:box-border ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-3 sm:ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
                                     >
                                         <option value="" style={{ backgroundColor: '#515F6C', color: '#ffffff' }} className="ppi:bg-[#515F6C] ppi:text-white">
                                             Any version
@@ -224,7 +224,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                     </select>
                                 </div>
 
-                                <div>
+                                <div className="ppi:min-w-0">
                                     <label className="ppi:block ppi:text-xs ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-slate-200 ppi:mb-2">
                                         PROVIDER
                                     </label>
@@ -232,7 +232,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                         value={filters.provider}
                                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleProviderChange(e.target.value as PluginProvider)}
                                         style={{ backgroundColor: '#515F6C', color: '#ffffff', colorScheme: 'dark' }}
-                                        className="ppi:w-full ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
+                                        className="ppi:w-full ppi:max-w-full ppi:box-border ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-3 sm:ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
                                     >
                                         {PROVIDERS.map((prov) => (
                                             <option
@@ -247,7 +247,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                     </select>
                                 </div>
 
-                                <div>
+                                <div className="ppi:min-w-0">
                                     <label className="ppi:block ppi:text-xs ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-slate-200 ppi:mb-2">
                                         SORT BY
                                     </label>
@@ -259,7 +259,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                             setPage(1);
                                         }}
                                         style={{ backgroundColor: '#515F6C', color: '#ffffff', colorScheme: 'dark' }}
-                                        className="ppi:w-full ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
+                                        className="ppi:w-full ppi:max-w-full ppi:box-border ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-3 sm:ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
                                     >
                                         {SORT_OPTIONS.map((opt) => (
                                             <option
@@ -274,7 +274,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                     </select>
                                 </div>
 
-                                <div>
+                                <div className="ppi:min-w-0">
                                     <label className="ppi:block ppi:text-xs ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-slate-200 ppi:mb-2">
                                         PER PAGE
                                     </label>
@@ -286,7 +286,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                             setPage(1);
                                         }}
                                         style={{ backgroundColor: '#515F6C', color: '#ffffff', colorScheme: 'dark' }}
-                                        className="ppi:w-full ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
+                                        className="ppi:w-full ppi:max-w-full ppi:box-border ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:px-3 sm:ppi:px-4 ppi:text-sm ppi:text-white ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
                                     >
                                         <option value={12} style={{ backgroundColor: '#515F6C', color: '#ffffff' }} className="ppi:bg-[#515F6C] ppi:text-white">12 plugins</option>
                                         <option value={24} style={{ backgroundColor: '#515F6C', color: '#ffffff' }} className="ppi:bg-[#515F6C] ppi:text-white">24 plugins</option>
@@ -329,12 +329,12 @@ export default function PluginsScreen(): React.JSX.Element {
                         )}
 
                         {totalPages > 1 && (
-                            <div className="ppi:flex ppi:items-center ppi:justify-between ppi:border-t ppi:border-white/10 ppi:pt-4">
+                            <div className="ppi:flex ppi:flex-wrap ppi:gap-3 ppi:items-center ppi:justify-between ppi:border-t ppi:border-white/10 ppi:pt-4">
                                 <button
                                     type="button"
                                     disabled={page <= 1}
                                     onClick={() => setPage((p: number) => Math.max(1, p - 1))}
-                                    className="ppi:flex ppi:items-center ppi:justify-center ppi:gap-1.5 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:h-[40px] ppi:min-w-[110px] ppi:px-6 ppi:text-xs sm:ppi:text-sm ppi:font-bold ppi:text-slate-200 hover:ppi:bg-[#515F6C] hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-40"
+                                    className="ppi:flex ppi:items-center ppi:justify-center ppi:gap-1.5 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:h-[40px] ppi:min-w-[100px] ppi:px-4 sm:ppi:px-6 ppi:text-xs sm:ppi:text-sm ppi:font-bold ppi:text-slate-200 hover:ppi:bg-[#515F6C] hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-40"
                                 >
                                     <ChevronLeft className="ppi:h-4 ppi:w-4" />
                                     <span>Previous</span>
@@ -348,7 +348,7 @@ export default function PluginsScreen(): React.JSX.Element {
                                     type="button"
                                     disabled={page >= totalPages}
                                     onClick={() => setPage((p: number) => p + 1)}
-                                    className="ppi:flex ppi:items-center ppi:justify-center ppi:gap-1.5 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:h-[40px] ppi:min-w-[110px] ppi:px-6 ppi:text-xs sm:ppi:text-sm ppi:font-bold ppi:text-slate-200 hover:ppi:bg-[#515F6C] hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-40"
+                                    className="ppi:flex ppi:items-center ppi:justify-center ppi:gap-1.5 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:h-[40px] ppi:min-w-[100px] ppi:px-4 sm:ppi:px-6 ppi:text-xs sm:ppi:text-sm ppi:font-bold ppi:text-slate-200 hover:ppi:bg-[#515F6C] hover:ppi:text-white ppi:transition-colors disabled:ppi:opacity-40"
                                 >
                                     <span>Next</span>
                                     <ChevronRight className="ppi:h-4 ppi:w-4" />

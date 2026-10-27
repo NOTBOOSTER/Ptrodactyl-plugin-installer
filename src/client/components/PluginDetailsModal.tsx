@@ -91,14 +91,14 @@ export function PluginDetailsModal({
 
     return (
         <div
-            className="ppi:fixed ppi:inset-0 ppi:z-50 ppi:flex ppi:items-center ppi:justify-center ppi:bg-black/75 ppi:p-4 ppi:backdrop-blur-sm ppi:transition-opacity ppi:duration-200"
+            className="ppi:fixed ppi:inset-0 ppi:z-50 ppi:flex ppi:items-center ppi:justify-center ppi:bg-black/75 ppi:p-2.5 sm:ppi:p-4 ppi:backdrop-blur-sm ppi:transition-opacity ppi:duration-200"
             onClick={onClose}
         >
             <div
-                className="ppi:relative ppi:flex ppi:w-full ppi:max-w-2xl ppi:max-h-[90vh] ppi:flex-col ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:shadow-2xl ppi:overflow-hidden ppi:transition-all ppi:duration-200"
+                className="ppi:relative ppi:flex ppi:w-full ppi:max-w-2xl ppi:max-h-[90vh] ppi:flex-col ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:shadow-2xl ppi:overflow-hidden ppi:box-border ppi:transition-all ppi:duration-200"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="ppi:p-5 ppi:border-b ppi:border-white/10 ppi:bg-[#36424D]">
+                <div className="ppi:p-4 sm:ppi:p-5 ppi:border-b ppi:border-white/10 ppi:bg-[#36424D]">
                     <div className="ppi:flex ppi:items-start ppi:gap-4">
                         {plugin.icon_url || project?.icon_url ? (
                             <img

@@ -68,7 +68,7 @@ export function ManagePluginsView({
     );
 
     return (
-        <div className="ppi:space-y-6">
+        <div className="ppi:space-y-6 ppi:w-full ppi:max-w-full ppi:overflow-x-hidden">
             <div className="ppi:flex ppi:flex-col ppi:gap-4 sm:ppi:flex-row sm:ppi:items-center sm:ppi:justify-between">
                 <div>
                     <h2 className="ppi:text-xl ppi:font-bold ppi:text-white">Installed Plugins</h2>
@@ -96,13 +96,13 @@ export function ManagePluginsView({
                 </div>
             </div>
 
-            <div className="ppi:relative">
+            <div className="ppi:relative ppi:w-full ppi:max-w-full">
                 <input
                     type="text"
                     value={searchQuery}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                     placeholder="Filter installed plugins..."
-                    className="ppi:w-full ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:pl-10 ppi:pr-4 ppi:text-sm ppi:text-white ppi:placeholder-slate-300 ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
+                    className="ppi:w-full ppi:max-w-full ppi:box-border ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:h-[46px] ppi:pl-10 ppi:pr-4 ppi:text-sm ppi:text-white ppi:placeholder-slate-300 ppi:outline-none focus:ppi:ring-2 focus:ppi:ring-[#2964C3]"
                 />
                 <Search className="ppi:absolute ppi:left-3.5 ppi:top-3.5 ppi:h-4 ppi:w-4 ppi:text-slate-300" />
             </div>

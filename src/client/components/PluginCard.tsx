@@ -23,21 +23,21 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
     const formattedDownloads = formatDownloads(plugin.downloads);
 
     return (
-        <div className="ppi:relative ppi:flex ppi:flex-col ppi:justify-between ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-5 ppi:transition-all ppi:duration-200 hover:ppi:border-white/25 hover:ppi:shadow-lg">
-            <div>
-                <div className="ppi:flex ppi:items-start ppi:gap-3.5">
+        <div className="ppi:relative ppi:flex ppi:flex-col ppi:justify-between ppi:w-full ppi:max-w-full ppi:overflow-hidden ppi:box-border ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-4 sm:ppi:p-5 ppi:transition-all ppi:duration-200 hover:ppi:border-white/25 hover:ppi:shadow-lg">
+            <div className="ppi:w-full ppi:min-w-0">
+                <div className="ppi:flex ppi:items-start ppi:gap-3 sm:ppi:gap-3.5">
                     {plugin.icon_url ? (
                         <img
                             src={plugin.icon_url}
                             alt={plugin.name}
-                            className="ppi:h-14 ppi:w-14 ppi:shrink-0 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:object-cover"
+                            className="ppi:h-12 ppi:w-12 sm:ppi:h-14 sm:ppi:w-14 ppi:shrink-0 ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:object-cover"
                             onError={(e) => {
                                 (e.currentTarget as HTMLElement).style.display = 'none';
                             }}
                         />
                     ) : (
-                        <div className="ppi:flex ppi:h-14 ppi:w-14 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:text-slate-300">
-                            <Package className="ppi:h-7 ppi:w-7" />
+                        <div className="ppi:flex ppi:h-12 ppi:w-12 sm:ppi:h-14 sm:ppi:w-14 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-none ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:text-slate-300">
+                            <Package className="ppi:h-6 ppi:w-6 sm:ppi:h-7 sm:ppi:w-7" />
                         </div>
                     )}
 
@@ -60,10 +60,10 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
                             {plugin.short_description || 'No description provided.'}
                         </p>
 
-                        <div className="ppi:mt-1.5 ppi:text-xs ppi:text-slate-300">
+                        <div className="ppi:mt-1.5 ppi:flex ppi:flex-wrap ppi:items-center ppi:gap-x-2 ppi:gap-y-0.5 ppi:text-xs ppi:text-slate-300">
                             <span>{formattedDownloads} downloads</span>
                             {plugin.followers !== undefined && plugin.followers !== null && (
-                                <span> · {plugin.followers.toLocaleString()} likes</span>
+                                <span>· {plugin.followers.toLocaleString()} likes</span>
                             )}
                         </div>
 
@@ -77,7 +77,7 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
                     </div>
                 </div>
 
-                <div className="ppi:absolute ppi:top-4 ppi:right-4 ppi:flex ppi:items-center ppi:gap-1.5">
+                <div className="ppi:absolute ppi:top-3.5 sm:ppi:top-4 ppi:right-3.5 sm:ppi:right-4 ppi:flex ppi:items-center ppi:gap-1.5">
                     <button
                         type="button"
                         onClick={() => onOpenDetails(plugin)}
@@ -105,7 +105,7 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
                 <button
                     type="button"
                     onClick={() => onInstall(plugin)}
-                    className="ppi:flex ppi:items-center ppi:justify-center ppi:rounded-none ppi:bg-[#2964C3] ppi:h-[40px] ppi:min-w-[120px] ppi:px-6 ppi:py-2 ppi:text-xs sm:ppi:text-sm ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-white hover:ppi:bg-[#2053a6] ppi:shadow-sm ppi:transition-all active:ppi:scale-95"
+                    className="ppi:flex ppi:items-center ppi:justify-center ppi:rounded-none ppi:bg-[#2964C3] ppi:h-[40px] ppi:min-w-[100px] sm:ppi:min-w-[120px] ppi:px-5 sm:ppi:px-6 ppi:py-2 ppi:text-xs sm:ppi:text-sm ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-white hover:ppi:bg-[#2053a6] ppi:shadow-sm ppi:transition-all active:ppi:scale-95"
                 >
                     INSTALL
                 </button>
