@@ -23,20 +23,20 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
     const formattedDownloads = formatDownloads(plugin.downloads);
 
     return (
-        <div className="ppi:relative ppi:flex ppi:flex-col ppi:justify-between ppi:rounded-xl ppi:border ppi:border-slate-700/60 ppi:bg-[#2b3544] ppi:p-4 ppi:transition-all ppi:duration-200 hover:ppi:border-slate-500/60 hover:ppi:shadow-lg">
+        <div className="ppi:relative ppi:flex ppi:flex-col ppi:justify-between ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:p-4.5 ppi:transition-all ppi:duration-200 hover:ppi:border-white/25 hover:ppi:shadow-lg">
             <div>
                 <div className="ppi:flex ppi:items-start ppi:gap-3.5">
                     {plugin.icon_url ? (
                         <img
                             src={plugin.icon_url}
                             alt={plugin.name}
-                            className="ppi:h-14 ppi:w-14 ppi:shrink-0 ppi:rounded-lg ppi:border ppi:border-slate-600/60 ppi:bg-slate-900 ppi:object-cover"
+                            className="ppi:h-14 ppi:w-14 ppi:shrink-0 ppi:rounded-lg ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:object-cover"
                             onError={(e) => {
                                 (e.currentTarget as HTMLElement).style.display = 'none';
                             }}
                         />
                     ) : (
-                        <div className="ppi:flex ppi:h-14 ppi:w-14 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:border ppi:border-slate-600/60 ppi:bg-slate-900 ppi:text-slate-400">
+                        <div className="ppi:flex ppi:h-14 ppi:w-14 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:text-slate-300">
                             <Package className="ppi:h-7 ppi:w-7" />
                         </div>
                     )}
@@ -44,23 +44,23 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
                     <div className="ppi:min-w-0 ppi:flex-1 ppi:pr-14">
                         <h3
                             onClick={() => onOpenDetails(plugin)}
-                            className="ppi:truncate ppi:text-sm sm:ppi:text-base ppi:font-semibold ppi:text-white hover:ppi:text-blue-400 ppi:cursor-pointer ppi:transition-colors"
+                            className="ppi:truncate ppi:text-sm sm:ppi:text-base ppi:font-bold ppi:text-white hover:ppi:text-blue-300 ppi:cursor-pointer ppi:transition-colors"
                             title={plugin.name}
                         >
                             {plugin.name}
                         </h3>
 
                         {plugin.author && (
-                            <p className="ppi:text-xs ppi:text-slate-400 ppi:truncate">
+                            <p className="ppi:text-xs ppi:text-slate-300 ppi:truncate">
                                 by {plugin.author}
                             </p>
                         )}
 
-                        <p className="ppi:mt-1.5 ppi:line-clamp-2 ppi:text-xs ppi:text-slate-400 ppi:leading-relaxed">
+                        <p className="ppi:mt-1.5 ppi:line-clamp-2 ppi:text-xs ppi:text-slate-200 ppi:leading-relaxed">
                             {plugin.short_description || 'No description provided.'}
                         </p>
 
-                        <div className="ppi:mt-1.5 ppi:text-xs ppi:text-slate-400">
+                        <div className="ppi:mt-1.5 ppi:text-xs ppi:text-slate-300">
                             <span>{formattedDownloads} downloads</span>
                             {plugin.followers !== undefined && plugin.followers !== null && (
                                 <span> · {plugin.followers.toLocaleString()} likes</span>
@@ -70,7 +70,7 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
                         <button
                             type="button"
                             onClick={() => onOpenDetails(plugin)}
-                            className="ppi:mt-1 ppi:inline-block ppi:text-xs ppi:text-blue-400 hover:ppi:text-blue-300 ppi:underline ppi:transition-colors"
+                            className="ppi:mt-1 ppi:inline-block ppi:text-xs ppi:font-medium ppi:text-blue-400 hover:ppi:text-blue-300 ppi:underline ppi:transition-colors"
                         >
                             Read more
                         </button>
@@ -82,7 +82,7 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
                         type="button"
                         onClick={() => onOpenDetails(plugin)}
                         title="View details & versions"
-                        className="ppi:flex ppi:h-7 ppi:w-7 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-400 hover:ppi:bg-slate-700/60 hover:ppi:text-white ppi:transition-colors"
+                        className="ppi:flex ppi:h-7 ppi:w-7 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-300 hover:ppi:bg-[#515F6C] hover:ppi:text-white ppi:transition-colors"
                     >
                         <Info className="ppi:h-4 ppi:w-4" />
                     </button>
@@ -93,7 +93,7 @@ export function PluginCard({ plugin, onOpenDetails, onInstall }: PluginCardProps
                             target="_blank"
                             rel="noreferrer noopener"
                             title="View on source website"
-                            className="ppi:flex ppi:h-7 ppi:w-7 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-400 hover:ppi:bg-slate-700/60 hover:ppi:text-white ppi:transition-colors"
+                            className="ppi:flex ppi:h-7 ppi:w-7 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-300 hover:ppi:bg-[#515F6C] hover:ppi:text-white ppi:transition-colors"
                         >
                             <ExternalLink className="ppi:h-4 ppi:w-4" />
                         </a>

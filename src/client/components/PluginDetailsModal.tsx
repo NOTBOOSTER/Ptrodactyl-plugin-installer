@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Spinner, httpErrorToHuman, toast } from '@pterodactyl/sdk';
 import {
-    Download,
     ExternalLink,
     Package,
     X,
-    Calendar,
-    Check,
 } from 'lucide-react';
 import { getPluginVersions, installPlugin } from '../api';
 import type { PluginItem, PluginProvider, PluginVersionItem } from '../types';
@@ -62,7 +59,7 @@ export function PluginDetailsModal({
             setInstallingVersionId(version.id);
             await installPlugin(serverIdentifier, plugin.id, version.id, provider);
         },
-        onSuccess: (_data, version) => {
+        onSuccess: (_data, version: PluginVersionItem) => {
             if (!plugin || !version) return;
             toast.success(`Successfully installed ${plugin.name} (${version.name})`);
             setInstallingVersionId(null);
@@ -98,22 +95,22 @@ export function PluginDetailsModal({
             onClick={onClose}
         >
             <div
-                className="ppi:relative ppi:flex ppi:w-full ppi:max-w-2xl ppi:max-h-[90vh] ppi:flex-col ppi:rounded-2xl ppi:border ppi:border-slate-700/80 ppi:bg-[#202936] ppi:shadow-2xl ppi:overflow-hidden ppi:transition-all ppi:duration-200"
+                className="ppi:relative ppi:flex ppi:w-full ppi:max-w-2xl ppi:max-h-[90vh] ppi:flex-col ppi:rounded-2xl ppi:border ppi:border-white/10 ppi:bg-[#3F4D5A] ppi:shadow-2xl ppi:overflow-hidden ppi:transition-all ppi:duration-200"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="ppi:p-5 ppi:border-b ppi:border-slate-700/70 ppi:bg-[#242e3d]">
+                <div className="ppi:p-5 ppi:border-b ppi:border-white/10 ppi:bg-[#36424D]">
                     <div className="ppi:flex ppi:items-start ppi:gap-4">
                         {plugin.icon_url || project?.icon_url ? (
                             <img
                                 src={plugin.icon_url || project?.icon_url || ''}
                                 alt={plugin.name}
-                                className="ppi:h-16 ppi:w-16 ppi:shrink-0 ppi:rounded-xl ppi:border ppi:border-slate-700 ppi:bg-slate-900 ppi:object-cover sm:ppi:h-20 sm:ppi:w-20"
+                                className="ppi:h-16 ppi:w-16 ppi:shrink-0 ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:object-cover sm:ppi:h-20 sm:ppi:w-20"
                                 onError={(e) => {
                                     (e.currentTarget as HTMLElement).style.display = 'none';
                                 }}
                             />
                         ) : (
-                            <div className="ppi:flex ppi:h-16 ppi:w-16 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-xl ppi:border ppi:border-slate-700 ppi:bg-slate-900 ppi:text-slate-400 sm:ppi:h-20 sm:ppi:w-20">
+                            <div className="ppi:flex ppi:h-16 ppi:w-16 ppi:shrink-0 ppi:items-center ppi:justify-center ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:text-slate-300 sm:ppi:h-20 sm:ppi:w-20">
                                 <Package className="ppi:h-8 ppi:w-8 sm:ppi:h-10 sm:ppi:w-10" />
                             </div>
                         )}
@@ -124,24 +121,24 @@ export function PluginDetailsModal({
                             </h2>
 
                             {plugin.author && (
-                                <p className="ppi:text-xs ppi:text-slate-400">
-                                    by <span className="ppi:text-slate-300">{plugin.author}</span>
+                                <p className="ppi:text-xs ppi:text-slate-300">
+                                    by <span className="ppi:text-white">{plugin.author}</span>
                                 </p>
                             )}
 
-                            <p className="ppi:mt-1 ppi:line-clamp-2 ppi:text-xs ppi:text-slate-300 ppi:leading-relaxed">
+                            <p className="ppi:mt-1 ppi:line-clamp-2 ppi:text-xs ppi:text-slate-200 ppi:leading-relaxed">
                                 {plugin.short_description || project?.description || 'A Minecraft server plugin.'}
                             </p>
 
                             <div className="ppi:mt-2 ppi:flex ppi:flex-wrap ppi:items-center ppi:gap-1.5">
-                                <span className="ppi:rounded ppi:bg-blue-600/20 ppi:border ppi:border-blue-500/30 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-blue-400">
+                                <span className="ppi:rounded ppi:bg-blue-600/30 ppi:border ppi:border-blue-400/40 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-blue-300">
                                     {provider}
                                 </span>
 
                                 {categories.slice(0, 2).map((cat: string) => (
                                     <span
                                         key={cat}
-                                        className="ppi:rounded ppi:bg-slate-800 ppi:border ppi:border-slate-700 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:text-slate-300"
+                                        className="ppi:rounded ppi:bg-[#515F6C] ppi:border ppi:border-white/10 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:text-slate-200"
                                     >
                                         {cat}
                                     </span>
@@ -150,14 +147,14 @@ export function PluginDetailsModal({
                                 {primaryLoaders.slice(0, 2).map((loader: string) => (
                                     <span
                                         key={loader}
-                                        className="ppi:rounded ppi:bg-slate-800 ppi:border ppi:border-slate-700 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:text-slate-300"
+                                        className="ppi:rounded ppi:bg-[#515F6C] ppi:border ppi:border-white/10 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:text-slate-200"
                                     >
                                         {loader}
                                     </span>
                                 ))}
 
                                 {primaryVersions.length > 0 && (
-                                    <span className="ppi:rounded ppi:bg-slate-800 ppi:border ppi:border-slate-700 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:font-mono ppi:text-slate-300">
+                                    <span className="ppi:rounded ppi:bg-[#515F6C] ppi:border ppi:border-white/10 ppi:px-2 ppi:py-0.5 ppi:text-[10px] ppi:font-mono ppi:text-slate-200">
                                         MC {primaryVersions[0]}
                                     </span>
                                 )}
@@ -172,7 +169,7 @@ export function PluginDetailsModal({
                                         target="_blank"
                                         rel="noreferrer noopener"
                                         title="View source website"
-                                        className="ppi:flex ppi:h-8 ppi:w-8 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-400 hover:ppi:bg-slate-700/60 hover:ppi:text-white ppi:transition-colors"
+                                        className="ppi:flex ppi:h-8 ppi:w-8 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-300 hover:ppi:bg-[#515F6C] hover:ppi:text-white ppi:transition-colors"
                                     >
                                         <ExternalLink className="ppi:h-4 ppi:w-4" />
                                     </a>
@@ -182,7 +179,7 @@ export function PluginDetailsModal({
                                     type="button"
                                     onClick={onClose}
                                     title="Close"
-                                    className="ppi:flex ppi:h-8 ppi:w-8 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-400 hover:ppi:bg-slate-700/60 hover:ppi:text-white ppi:transition-colors"
+                                    className="ppi:flex ppi:h-8 ppi:w-8 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-300 hover:ppi:bg-[#515F6C] hover:ppi:text-white ppi:transition-colors"
                                 >
                                     <X className="ppi:h-5 ppi:w-5" />
                                 </button>
@@ -208,10 +205,10 @@ export function PluginDetailsModal({
 
                 <div className="ppi:flex-1 ppi:overflow-y-auto ppi:p-5 ppi:space-y-3">
                     <div className="ppi:flex ppi:items-center ppi:justify-between ppi:pb-1">
-                        <span className="ppi:text-xs ppi:font-semibold ppi:uppercase ppi:tracking-wider ppi:text-slate-400">
+                        <span className="ppi:text-xs ppi:font-bold ppi:uppercase ppi:tracking-wider ppi:text-slate-200">
                             Available Versions ({versions.length})
                         </span>
-                        <span className="ppi:text-xs ppi:text-slate-500">
+                        <span className="ppi:text-xs ppi:text-slate-300">
                             Target directory: /plugins
                         </span>
                     </div>
@@ -221,11 +218,11 @@ export function PluginDetailsModal({
                             <Spinner centered />
                         </div>
                     ) : isError ? (
-                        <div className="ppi:rounded-xl ppi:border ppi:border-red-500/30 ppi:bg-red-500/10 ppi:p-5 ppi:text-center ppi:text-sm ppi:text-red-400">
+                        <div className="ppi:rounded-xl ppi:border ppi:border-red-500/30 ppi:bg-red-500/10 ppi:p-5 ppi:text-center ppi:text-sm ppi:text-red-300">
                             Failed to load versions: {httpErrorToHuman(error)}
                         </div>
                     ) : versions.length === 0 ? (
-                        <div className="ppi:rounded-xl ppi:border ppi:border-slate-700/60 ppi:bg-slate-800/40 ppi:p-8 ppi:text-center ppi:text-sm ppi:text-slate-400">
+                        <div className="ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#515F6C]/40 ppi:p-8 ppi:text-center ppi:text-sm ppi:text-slate-300">
                             No installable versions found for this plugin.
                         </div>
                     ) : (
@@ -234,14 +231,14 @@ export function PluginDetailsModal({
                             return (
                                 <div
                                     key={version.id}
-                                    className="ppi:flex ppi:flex-col ppi:gap-3 ppi:rounded-xl ppi:border ppi:border-slate-700/60 ppi:bg-[#2b3544] ppi:p-3.5 hover:ppi:border-slate-600 sm:ppi:flex-row sm:ppi:items-center sm:ppi:justify-between ppi:transition-colors"
+                                    className="ppi:flex ppi:flex-col ppi:gap-3 ppi:rounded-xl ppi:border ppi:border-white/10 ppi:bg-[#515F6C] ppi:p-3.5 hover:ppi:border-white/25 sm:ppi:flex-row sm:ppi:items-center sm:ppi:justify-between ppi:transition-colors"
                                 >
                                     <div className="ppi:min-w-0 ppi:space-y-1">
                                         <h4 className="ppi:truncate ppi:text-sm ppi:font-bold ppi:text-white">
                                             {version.name}
                                         </h4>
 
-                                        <div className="ppi:flex ppi:flex-wrap ppi:items-center ppi:gap-2.5 ppi:text-xs ppi:text-slate-400">
+                                        <div className="ppi:flex ppi:flex-wrap ppi:items-center ppi:gap-2.5 ppi:text-xs ppi:text-slate-300">
                                             {version.downloads !== null && version.downloads !== undefined && (
                                                 <span>{formatDownloads(version.downloads)} downloads</span>
                                             )}
@@ -264,13 +261,13 @@ export function PluginDetailsModal({
                                                 {version.game_versions.slice(0, 6).map((mcVer: string) => (
                                                     <span
                                                         key={mcVer}
-                                                        className="ppi:rounded ppi:bg-slate-800 ppi:px-1.5 ppi:py-0.5 ppi:font-mono ppi:text-[10px] ppi:text-slate-300"
+                                                        className="ppi:rounded ppi:bg-[#3F4D5A] ppi:border ppi:border-white/10 ppi:px-1.5 ppi:py-0.5 ppi:font-mono ppi:text-[10px] ppi:text-slate-200"
                                                     >
                                                         {mcVer}
                                                     </span>
                                                 ))}
                                                 {version.game_versions.length > 6 && (
-                                                    <span className="ppi:text-[10px] ppi:text-slate-500">
+                                                    <span className="ppi:text-[10px] ppi:text-slate-300">
                                                         +{version.game_versions.length - 6} more
                                                     </span>
                                                 )}
@@ -285,7 +282,7 @@ export function PluginDetailsModal({
                                                 target="_blank"
                                                 rel="noreferrer noopener"
                                                 title="View version page"
-                                                className="ppi:flex ppi:h-8 ppi:w-8 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-400 hover:ppi:bg-slate-700/60 hover:ppi:text-white ppi:transition-colors"
+                                                className="ppi:flex ppi:h-8 ppi:w-8 ppi:items-center ppi:justify-center ppi:rounded-lg ppi:text-slate-300 hover:ppi:bg-[#3F4D5A] hover:ppi:text-white ppi:transition-colors"
                                             >
                                                 <ExternalLink className="ppi:h-4 ppi:w-4" />
                                             </a>
