@@ -1,6 +1,6 @@
 # Ptrodactyl Plugin Installer for Pterodactyl 2.0
 
-Ptrodactyl Plugin Installer is a native Pterodactyl 2.0 extension that allows server owners and administrators to search, discover, and install Minecraft server plugins directly into `/plugins` from Modrinth, SpigotMC, CurseForge, and Hangar.
+Ptrodactyl Plugin Installer is a native Pterodactyl 2.0 extension that allows server owners and administrators to search, discover, and install Minecraft server plugins directly into `/plugins` from Modrinth, SpigotMC, and Hangar.
 
 Developed by **Bhaskar** ([StrayStudios](https://github.com/StrayStudios)).
 
@@ -8,54 +8,55 @@ Developed by **Bhaskar** ([StrayStudios](https://github.com/StrayStudios)).
 
 ## Features
 
-- **Multi-Provider Search**: Discover plugins across Modrinth, SpigotMC, CurseForge, and Hangar.
-- **Direct Installation**: One-click download directly to `/plugins`.
-- **Version Compatibility**: Filter by Minecraft versions (e.g., 1.21, 1.20.4, 1.19) and server software/loaders (Paper, Velocity, Waterfall, Purpur).
-- **Installed Detection & Management**: Instant badge count and direct management (view/delete) of installed `.jar` files in the server's `/plugins` directory.
+- **Multi-Provider Search**: Discover plugins across Modrinth, SpigotMC, and Hangar without needing API keys.
+- **Direct Installation**: One-click download directly to the server's `/plugins` folder.
+- **Version Compatibility**: Filter by Minecraft versions (e.g. 1.21, 1.20.4, 1.19) and server software/loaders (Paper, Velocity, Waterfall, Purpur).
+- **Installed Detection & Management**: Real-time badge count and direct management (view/delete) of installed `.jar` files in the server's `/plugins` directory.
 - **Native Pterodactyl 2.0 Experience**: Fully integrated with `@pterodactyl/sdk`, Tailwind CSS, and panel permissions (`file.create`, `file.update`).
-- **Encrypted Admin Settings**: Securely store and manage your CurseForge API key in **Admin → Extensions**.
+- **Automatic Minecraft Detection**: Only displays on servers running Minecraft software (e.g. Paper MC, Spigot, Purpur).
 
 ---
 
 ## Installation
 
-### From Pre-built Package
-1. Download the `ptrodactyl-plugin-installer.pteroext` release archive.
-2. In your Pterodactyl 2.0 Admin Area, navigate to **Admin → Extensions**.
-3. Upload the `.pteroext` file and click **Enable**.
+Run this one-liner command from your Pterodactyl panel root directory (`/var/www/pterodactyl`):
 
-Or install via CLI from the panel root:
 ```bash
-php artisan p:extension:install extensions/ptrodactyl-plugin-installer --enable
+cd /var/www/pterodactyl && git clone https://github.com/NOTBOOSTER/Ptrodactyl-plugin-installer.git extensions/ptrodactyl-plugin-installer && cd extensions/ptrodactyl-plugin-installer && npm install && npm run build && cd /var/www/pterodactyl && php artisan p:extension:install extensions/ptrodactyl-plugin-installer --enable && php artisan optimize:clear
 ```
 
 ---
 
-## Configuration
+## Update Existing Installation
 
-To enable CurseForge mod and plugin searches:
-1. Obtain an API key from the [CurseForge Developer Console](https://console.curseforge.com).
-2. Go to **Admin → Extensions → Ptrodactyl Plugin Installer**.
-3. Paste your CurseForge API key into the encrypted field and save.
+If you already have the extension installed on your panel, run this command to update:
+
+```bash
+cd /var/www/pterodactyl/extensions/ptrodactyl-plugin-installer && git pull origin main && npm run build && cd /var/www/pterodactyl && php artisan p:extension:install extensions/ptrodactyl-plugin-installer --enable && php artisan optimize:clear
+```
 
 ---
 
-## Building from Source
+## Manual Step-by-Step Installation
 
-Requirements:
-- PHP 8.3+
-- Node.js 22+
-
-Install dependencies and build the frontend bundle:
+1. Clone the repository into `extensions/ptrodactyl-plugin-installer`:
 ```bash
+cd /var/www/pterodactyl
+git clone https://github.com/NOTBOOSTER/Ptrodactyl-plugin-installer.git extensions/ptrodactyl-plugin-installer
+```
+
+2. Build the client bundle:
+```bash
+cd extensions/ptrodactyl-plugin-installer
 npm install
-npm run typecheck
 npm run build
 ```
 
-Package the extension for distribution:
+3. Register and enable the extension:
 ```bash
-php artisan p:extension:pack extensions/ptrodactyl-plugin-installer --output=ptrodactyl-plugin-installer.pteroext
+cd /var/www/pterodactyl
+php artisan p:extension:install extensions/ptrodactyl-plugin-installer --enable
+php artisan optimize:clear
 ```
 
 ---
